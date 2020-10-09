@@ -1,0 +1,45 @@
+workFlow: springBoot
+releaseId: nam.2011
+projectId: ngeh.eventhub.uscd.midas.ao
+region: NAM
+csiId: 172224
+sourceCode:
+    projectStream: master
+    projectModule: evcld/ngeh.eventhub.uscd.midas.ao.git
+    repositoryInstance: ssh://git@cedt-gct-bitbucketcli.nam.nsroot.net:7999
+build:
+    dependencyResolutionRepo: artifactory
+    enableMavenProfiles: NA
+    printVerboseLog: false
+    deployLibraries: false
+    pomFileLocation: .
+    packageIncludes: NA
+    jenkinsAdditionalFolder: NA
+    tibcoBW:
+        STEVersion: NA
+    deployToPkgArchive: true
+    postBuildDeployEnv: DEV
+staticCodeAnalysis:
+    blackDuck:
+        notifySOEID: NA
+        archerRecord:
+    sonarQube:
+        sonarExcludes: Defaults
+        sonarLanuguage: Defaults
+    appScan:
+        archerRecord: 
+threshold:
+    unitTestSuccessDensity: 80
+    unitTestCoverage: 80
+    techDebtRatio: 80
+    securityRating: 80
+    reliabilityRating: 80
+    functionalTest: 80
+    performanceTest: 80
+deploy:
+    DEV:
+        rlmUIParams: NA
+        rlmParams: NA
+        rlmTemplate: f2_172224-EH_MIDAS_AO_FILECOPY
+        rlmEnvironment: DEV
+        rlmExecute: true
