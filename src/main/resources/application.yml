@@ -1,0 +1,70 @@
+---      
+eventhub: 
+  configuration:
+    kstreams:  
+      windowSizeSeconds: 60
+      cleanUpPolicy: 3
+      outputTopic: nam.us.all.derived.midas.ao.metrics
+  payload:
+    metrics:  
+      conditions:
+        categorization: file://./src/main/resources/udf_conditions.json
+        dateValidateField: createdDate
+        
+config: 
+  output:
+    outputFormat: '{ "name" : "MIDAS_ROSS", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"MINUTE", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 2, "applicationsApproved": 2, "applicationsPended": 2, "applicationsDeclined": 2}'
+    headerFormatTimeZone: UTC
+    bodyFormatTimeZone: CST
+    
+spring:
+  application: 
+    name: EventHub-MIDAS_AO-Realtime-Metrics
+  kafka:
+    bootstrap-servers: sd-2e07-e38a:9092,sd-ab2b-d7f2:9092,sd-e129-26ef:9092
+    consumer:
+      # Configures the Spring Kafka ErrorHandlingDeserializer that delegates to the 'real' deserializers
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+    properties:
+      # Delegate deserializers
+      spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+      spring.deserializer.value.delegate.class: com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde
+    producer:
+      bootstrap-servers: sd-2e07-e38a:9092,sd-ab2b-d7f2:9092,sd-e129-26ef:9092
+      client-id: EventHub-MIDAS_AO-Realtime-Metrics-Producer
+      properties: 
+        key.serializer: org.apache.kafka.common.serialization.StringSerializer
+        value.serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  cloud:
+    stream:
+     bindings:
+        data-input:
+          destination: nam.us.retailbank.digital.raw.ross-application
+     kafka: 
+        streams:
+          binder:
+            brokers: sd-2e07-e38a:9092,sd-ab2b-d7f2:9092,sd-e129-26ef:9092
+            configuration: 
+              application.id: I_STR_MIDAS_AO_A_EI_01_EH
+              commit.interval.ms: 1000             
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde
+              default.deserialization.exception.handler: org.apache.kafka.streams.errors.LogAndContinueExceptionHandler
+              producer.interceptor.class: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
+              consumer.interceptor.class: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
+              consumer.auto.offset.reset: latest
+              state.dir: ./
+# application configuration
+logging:
+  level:
+    root: INFO
+    org:
+      apache:
+        http: INFO
+      springframework:
+        web: INFO
+  pattern:
+    console: '%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n'
+      
