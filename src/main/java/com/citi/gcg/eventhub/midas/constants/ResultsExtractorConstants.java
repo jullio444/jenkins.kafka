@@ -14,8 +14,6 @@
 */
 package com.citi.gcg.eventhub.midas.constants;
 
-import java.util.Map;
-
 public class ResultsExtractorConstants {
 	
 	public static final int ZERO_RETURN_CODE = 0;
@@ -39,7 +37,7 @@ public class ResultsExtractorConstants {
 	public static final String CONST_VALUE = "value";
 	public static final String CONST_SATISFY_CONDITION = "“satisfyCondition”";
 	
-	public static final Map<String,String> MAP_NULL = null;
+
 	public static final String STRING_NULL = "null";
 	public static final String STRING_EMPTY = "";
 	

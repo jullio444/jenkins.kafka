@@ -256,10 +256,24 @@ public class ApplicationTest {
 		JsonNode node1= mapper.readTree(setJsonValuesForInput("I", "APAO", "", "GOOGLE", "901"));
 		JsonNode node2= mapper.readTree(setJsonValuesForInput("C", "APAO", "ROAD", "GOOGLE", "901"));
 		JsonNode node3= mapper.readTree(setJsonValuesForInput("I", "RODR", "", "GOOGLE", "901"));
+		JsonNode node4= mapper.readTree(setJsonValuesForInput("I", "RORR", "", "GOOGLE", "901"));
+		JsonNode node5= mapper.readTree(setJsonValuesForInput("C", "APAO", "RORR", "GOOGLE", "901"));
+		JsonNode node6= mapper.readTree(setJsonValuesForInput("I", "", "", "GOOGLE", "901"));
+		JsonNode node7= mapper.readTree(setJsonValuesForInput("C", "ROAD", "ROFR", "GOOGLE", "901"));
 		assertEquals("applications_approved", resultsExtractor.extractResultsFromData(node1, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
 		assertEquals("applications_pended", resultsExtractor.extractResultsFromData(node2, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
 		assertEquals("applications_approved", resultsExtractor.extractResultsFromData(node2, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
 		assertEquals("applications_declined", resultsExtractor.extractResultsFromData(node3, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
+		
+		logger.info("Testing other applicationStatus conditions");
+		assertEquals("null", resultsExtractor.extractResultsFromData(node4, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
+		assertEquals("null", resultsExtractor.extractResultsFromData(node5, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
+		assertEquals("null", resultsExtractor.extractResultsFromData(node6, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
+		assertEquals("null", resultsExtractor.extractResultsFromData(node6, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
+		assertEquals("applications_pended", resultsExtractor.extractResultsFromData(node7, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
+		assertEquals("applications_pended", resultsExtractor.extractResultsFromData(node7, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
+		
+		
 		
 	}
 }

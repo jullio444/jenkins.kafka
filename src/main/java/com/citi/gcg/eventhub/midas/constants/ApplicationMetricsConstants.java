@@ -18,21 +18,16 @@ public class ApplicationMetricsConstants {
 
 	public static final String KEY_SERDE = "org.apache.kafka.common.serialization.Serdes$StringSerde";
 	public static final String VALUE_SERDE = "com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde";
-
+	public static final String INPUT_TOPIC = "data-input";
 	public static final  String CURRENT_APPLICATION_STATUS = "applicationStatus";
 	public static final  String PREVIOUS_APPLICATION_STATUS = "previousApplicationStatus";
 	public static final  String APPLICATION_OPERATION = "applicationOperation";
 	public static final  String APPLICATION_OPERATION_NEW = "I";
 	public static final  String APPLICATION_OPERATION_UPDATE = "U";
-	
-	
-	
-	public static final  String UNDEFINEDTYPE="UndefinedType";
-	public static final  String UNDEFINEDSTATUS="UndefinedStatus";
+
 	
 	public static final String AGGREGATOR_STATSTORE = "aggregator-statestore";
 	public static final String TRANSFORMER_STATSTORE = "transformer-statestore";
-	public static final String APPID_STATSTORE = "applicacionId-statestore";
 	
 	public static final long CONTEXT_SCHEDULE = 1;
 	

@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Configuration
 public class KafkaProcesor implements Processor<String, JsonNode> {
 
-	private static final  Logger logger = LoggerFactory.getLogger(KafkaProcesor.class);
+	private static final  Logger LOGGER = LoggerFactory.getLogger(KafkaProcesor.class);
 
 	private static final String DATE_TIME_FORMAT = "MM-dd-yyyy'T'HH:mm:ss z";
 	private ObjectNode output;
@@ -49,9 +49,9 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 	@Override
 	public void init(ProcessorContext context) {
 		this.context = context;
-        
-		logger.info("loading the required json as output node");
-		
+
+		LOGGER.info("KafkaProcesor- loading the required json as output node");
+
 		output = (ObjectNode) outputConfiguration.getDailyOutputJsonObj();
 
 		headerTimeZone = ZoneId.of(TimeZone.getTimeZone(outputConfiguration.getHeaderFormatTimeZone()).toZoneId().toString());
@@ -66,15 +66,11 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 
 	@Override
 	public void process(String key, JsonNode value) {
-		switch (key) {
-		case AppAOConstants.METRIC:
+		if (key.equalsIgnoreCase(AppAOConstants.METRIC)) {
 			updateDailyOutput(value);
 			String message = output.toString();
-			logger.info("1 minute metrics: {}", message);
+			LOGGER.info("KafkaProcesor process- 1 minute metrics: {}", message);
 			kProducer.sendMessage(kafkaStreamsConfigurationYML.getOutputTopic(), message);
-			break;
-		default:
-			break;
 		}
 		context.commit();
 	}

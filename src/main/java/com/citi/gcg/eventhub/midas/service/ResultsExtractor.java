@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.citi.gcg.eventhub.midas.constants.ResultsExtractorConstants;
+import com.citi.gcg.eventhub.midas.exception.MetricsApplicationRuntimeException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /***
@@ -71,7 +72,7 @@ public class ResultsExtractor {
 	private Map<String, String> processForExtractResultsFromData(JsonNode dataJsonObject,
 			JsonNode conditionsJsonObject) {
 
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> result = new HashMap<>();
 
 		conditionsJsonObject.fieldNames().forEachRemaining(resultantKey -> {
 			if(!result.containsKey(resultantKey)) {
@@ -140,7 +141,7 @@ public class ResultsExtractor {
 
 		if(dataJsonObject.isContainerNode()) {
 			if(fieldIndex >= field.length) {
-				throw new RuntimeException("Reached maximum fields. Improper condition.");
+				throw new MetricsApplicationRuntimeException("Reached maximum fields. Improper condition.");
 			}else{
 				String key = field[fieldIndex];
 				if(dataJsonObject.has(key) && (!StringUtils.isNumeric(key)) && (!key.equals(ResultsExtractorConstants.STAR))) {
@@ -153,7 +154,7 @@ public class ResultsExtractor {
 
 		} if(dataJsonObject.isArray()) {
 			if(fieldIndex >= field.length) {
-				throw new RuntimeException("Reached maximum fields. Improper condition.");
+				throw new MetricsApplicationRuntimeException("Reached maximum fields. Improper condition.");
 			}else {
 				String key = field[fieldIndex];
 				if(StringUtils.isNumeric(key)) {

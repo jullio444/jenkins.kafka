@@ -77,7 +77,7 @@ public class AppKafkaStream {
 	}
 
 	@KafkaStreamsStateStore(name = ApplicationMetricsConstants.TRANSFORMER_STATSTORE, type = StoreType.KEYVALUE, keySerde = ApplicationMetricsConstants.KEY_SERDE, valueSerde = ApplicationMetricsConstants.VALUE_SERDE)
-	@StreamListener(KafkaEventProcessor.INPUT_TOPIC)
+	@StreamListener(ApplicationMetricsConstants.INPUT_TOPIC)
 	public void proccess(KStream<String, JsonNode> stream) {
 		stream
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))

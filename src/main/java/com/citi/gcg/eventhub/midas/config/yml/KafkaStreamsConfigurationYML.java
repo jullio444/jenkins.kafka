@@ -39,7 +39,7 @@ public class KafkaStreamsConfigurationYML {
 	}
 
 	public KafkaStreamsConfigurationYML() {
-		// TODO Auto-generated constructor stub
+		// default constructor
 	}
 	
 	public int getCleanUpPolicy() {
