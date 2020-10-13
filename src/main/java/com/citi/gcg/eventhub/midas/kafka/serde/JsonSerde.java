@@ -19,7 +19,12 @@ import org.apache.kafka.connect.json.JsonDeserializer;
 import org.apache.kafka.connect.json.JsonSerializer;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
+/***
+ * Custom Json Serde to create Serde (SerializerDeserializer) for JSON.
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 public class JsonSerde extends WrapperSerde<JsonNode>{
 
 	public JsonSerde() {

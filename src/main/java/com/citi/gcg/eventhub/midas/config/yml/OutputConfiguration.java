@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2016 by Citigroup. All rights reserved.
+ * Citigroup claims copyright in this computer program as an unpublished work,
+ * one or more versions of which were first used to provide services to
+ * customers on the dates indicated in the foregoing notice. Claim of
+ * copyright does not imply waiver of other rights.
+ *
+ * NOTICE OF PROPRIETARY RIGHTS
+ *
+ * This program is a confidential trade secret and the property of Citigroup.
+ * Use, examination, reproduction, disassembly, decompiling, transfer and/or
+ * disclosure to others of all or any part of this software program are
+ * strictly prohibited except by express written agreement with Citigroup.
+ */
 package com.citi.gcg.eventhub.midas.config.yml;
 
 import java.io.IOException;
@@ -13,11 +27,19 @@ import com.citi.gcg.eventhub.midas.constants.AppYmlConfigConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/***
+ * 
+ * Output configuration class for fetching the required properties to create output Json
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 @Configuration
 @ConfigurationProperties(value = AppYmlConfigConstants.OUTPUT_CONFIG_YML_PREFIX)
 public class OutputConfiguration {
-	private static final Logger LOG = LoggerFactory.getLogger(OutputConfiguration.class);
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(OutputConfiguration.class);
+
 	private String outputFormat;
 	private JsonNode dailyOutputJsonObj;
 	private ObjectMapper mapper;
@@ -26,16 +48,16 @@ public class OutputConfiguration {
 	public OutputConfiguration(){
 		mapper = new ObjectMapper();
 	}
-	
+
 	@PostConstruct
 	private void init() {
 		try {
 			dailyOutputJsonObj = mapper.readTree(outputFormat);
-			if(LOG.isInfoEnabled()) {
-				LOG.info(String.format("Daily OutputOutput format: %s", dailyOutputJsonObj.toString()));
+			if(LOGGER.isInfoEnabled()) {
+				LOGGER.info(String.format("Daily OutputOutput format: %s", dailyOutputJsonObj.toString()));
 			}
 		} catch (IOException exception) {
-			LOG.error(String.format("Error Loading the JSON formats %s", exception.toString()));
+			LOGGER.error(String.format("Error Loading the JSON formats %s", exception.toString()));
 		}
 	}
 

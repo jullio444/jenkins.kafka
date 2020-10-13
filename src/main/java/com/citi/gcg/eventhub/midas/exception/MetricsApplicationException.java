@@ -14,6 +14,13 @@
 */
 package com.citi.gcg.eventhub.midas.exception;
 
+/***
+ * 
+ * A custom exception class to throw an exception in EventPayloadConfigurationYML class
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 public class MetricsApplicationException extends Exception{
 
 	private static final long serialVersionUID = 1L;

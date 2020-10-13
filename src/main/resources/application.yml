@@ -33,6 +33,7 @@ spring:
     producer:
       bootstrap-servers: sd-2e07-e38a:9092,sd-ab2b-d7f2:9092,sd-e129-26ef:9092
       client-id: EventHub-MIDAS_AO-Realtime-Metrics-Producer
+      retries: 3
       properties: 
         key.serializer: org.apache.kafka.common.serialization.StringSerializer
         value.serializer: org.apache.kafka.common.serialization.StringSerializer

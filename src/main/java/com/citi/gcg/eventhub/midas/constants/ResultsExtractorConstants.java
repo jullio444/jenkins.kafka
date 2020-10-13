@@ -14,6 +14,12 @@
 */
 package com.citi.gcg.eventhub.midas.constants;
 
+/***
+ * ResultsExtractorConstants Class for ResultExtractor class which evaluates the payload
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 public class ResultsExtractorConstants {
 	
 	public static final int ZERO_RETURN_CODE = 0;
@@ -22,7 +28,6 @@ public class ResultsExtractorConstants {
 	public static final int CONST_ONE = 1;
 	
 	public static final String DATA_NOT_AVAILABLE = "DATA_NOT_AVAILABLE";
-	public static final String FILE_PREFIX = "file://";
 	public static final String DOT = "\\.";
 	public static final String STAR = "*";
 	

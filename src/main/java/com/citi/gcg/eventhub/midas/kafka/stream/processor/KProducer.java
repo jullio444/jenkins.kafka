@@ -24,7 +24,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 /***
- * It is to send the final json to the derived topic
+ * KafkaProducer class to send the final json to the derived topic
  * @author EventHub Dev
  *
  */

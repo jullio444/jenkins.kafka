@@ -14,16 +14,19 @@
 */
 package com.citi.gcg.eventhub.midas.constants;
 
-public class AppAOConstants {
+/***
+ * Application Account opening Constants Class for processor class
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 
-	public static final String PREVIOUS_APP_STATUS = "previousAppStatus";
-	public static final String CURRENT_APP_STATUS = "currentAppStatus";
+public class AppAOConstants {
 
 	public static final String METRICS_APP_SUBMITTED = "applicationsSubmitted";
 	public static final String METRICS_APP_APPROVED = "applicationsApproved";
 	public static final String METRICS_APP_PENDED = "applicationsPended";
 	public static final String METRICS_APP_DECLINED = "applicationsDeclined";
-	public static final String STATE_STORE_AO_STATUS = "ao-status-transformer";
 	public static final String TRANSACTIONDATETIME = "transactionDateTime";
 	public static final String METRIC= "metric";
 	

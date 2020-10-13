@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.citi.gcg.eventhub.midas.constants.ResultsExtractorConstants;
@@ -37,6 +39,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 @Service
 public class ResultsExtractor {
 
+	private static final  Logger LOGGER = LoggerFactory.getLogger(ResultsExtractor.class);
+	
 	public Map<String, String> extractResultsFromData(JsonNode data, JsonNode conditionInput){
 		return processForExtractResultsFromData(data, conditionInput);
 	}
@@ -62,6 +66,8 @@ public class ResultsExtractor {
 		
 
 		if((successFlags.size()) > 0 && (!successFlags.contains(Boolean.FALSE))) {
+			
+			LOGGER.debug("ResultsExtractor: the filter condition is matched with the payload ");
 			return Boolean.TRUE;
 		}
 
@@ -173,6 +179,10 @@ public class ResultsExtractor {
 		}else if(dataJsonObject.isTextual()){
 			String dataValue = dataJsonObject.asText(ResultsExtractorConstants.STRING_NULL);
 			if(dataValue.matches(value)) {
+				
+				LOGGER.debug("ResultsExtractor: the expected value {} matches with the value {} in payload ",
+						dataValue, value);
+				
 				successFlags.add(Boolean.TRUE);
 			}else {
 				if(!filterType.equalsIgnoreCase(ResultsExtractorConstants.CONDITION_ANY)) {

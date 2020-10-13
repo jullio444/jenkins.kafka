@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /***
- * EventPayaload configuration class for fetching the required conditions Json for evauluating the payload
+ * EventPayaload configuration class for fetching the required conditions Json for evaluating the payload
  * 
  * @author EventHub Dev Team
  *
@@ -63,10 +63,15 @@ public class EventPayloadConfigurationYML {
 
 		if(categorization.startsWith(AppYmlConfigConstants.FILE_PREFIX)) {
 			try {
+
+				LOGGER.trace("EventPayloadConfigurationYML: loading of the conditions JSON file {} ",categorization);
+
 				categorization = new String(Files.readAllBytes(Paths.get(categorization.substring(AppYmlConfigConstants.FILE_PREFIX.length()))));
 				JsonNode jsonObj = mapper.readTree(categorization);
 				if(jsonObj.has(AppYmlConfigConstants.CONST_FILTERS)) {
 					innerFilters = jsonObj.get(AppYmlConfigConstants.CONST_FILTERS);
+				}else {
+					LOGGER.info("EventPayloadConfigurationYML: there are no filters provided in the conditions JSON");
 				}
 
 				if(jsonObj.has(AppYmlConfigConstants.CONST_CONDITIONS)) {
@@ -76,8 +81,11 @@ public class EventPayloadConfigurationYML {
 				}
 
 			} catch (Exception e) {
-				LOGGER.error("unable to parse the JSON due to the exception {}", e.getLocalizedMessage());
+				LOGGER.error("EventPayloadConfigurationYML: unable to parse the JSON due to the exception {}", e.getLocalizedMessage());
 			}
+		}else {
+
+			LOGGER.warn("EventPayloadConfigurationYML: the prefix of conditions JSON file doesn't match with {}", AppYmlConfigConstants.FILE_PREFIX," , hence provide the correct configuration");
 		}
 
 		setFilters(innerFilters);

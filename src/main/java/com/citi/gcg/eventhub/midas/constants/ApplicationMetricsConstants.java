@@ -14,6 +14,13 @@
 */
 package com.citi.gcg.eventhub.midas.constants;
 
+/***
+ * ApplicationMetricsConstants Class for kafkastream and aggregator classes
+ * 
+ * @author EventHub Dev Team
+ *
+ */
+
 public class ApplicationMetricsConstants {
 
 	public static final String KEY_SERDE = "org.apache.kafka.common.serialization.Serdes$StringSerde";
@@ -40,6 +47,7 @@ public class ApplicationMetricsConstants {
 	public static final String TOTAL_APPROVED = "applicationsApproved";
 	public static final String TOTAL_PENDED = "applicationsPended";
 	public static final String TOTAL_DECLINED = "applicationsDeclined";
+
 	
 	private ApplicationMetricsConstants() {}
 	

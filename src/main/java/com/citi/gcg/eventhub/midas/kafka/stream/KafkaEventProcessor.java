@@ -19,6 +19,12 @@ import org.springframework.cloud.stream.annotation.Input;
 
 import com.citi.gcg.eventhub.midas.constants.ApplicationMetricsConstants;
 
+/***
+ * Kafka binding class for input topic to the Kafka stream.
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 public interface KafkaEventProcessor {
 
 	@Input(ApplicationMetricsConstants.INPUT_TOPIC)
