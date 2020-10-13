@@ -53,29 +53,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
 properties = {"server.port=1"})
 public class ApplicationTest {
-	
+
 	@Autowired
 	StreamsBuilderFactoryBean streamsBuilderFactoryBean;
 
 	@Autowired
 	EventPayloadConfigurationYML eventPayloadConfigurationYML;
-	
+
 	@Autowired
 	OutputConfiguration outputConfiguration;
-	
+
 	@Autowired
 	AppService appService;
 
 	@Autowired
 	ResultsExtractor resultsExtractor;
-	
+
 	private static final  Logger logger = LoggerFactory.getLogger(ApplicationTest.class);
 	private static final String INPUT_TOPIC = "nam.us.retailbank.digital.raw.ross-application";
 	private static final String OUTPUT_TOPIC = "nam.us.all.derived.midas.ao.metrics";
 	private static final String MODIFY_INPUT ="{\"event\": {\"header\": {\"businessCode\": \"GCB\",\"timeStamp\": \"2019-08-13 17:36:10 GMT\",\"producerCSI\": \"172109\",\"countrycode\": \"US\",\"name\": \"RossApplication\",\"channel\": \"MIDAS\",\"transactionTime\": \"2019-08-13 17:36:10 GMT\",\"version\": \"1.0\",\"uuid\": \"8efa5c10-dd29-11e8-8da0-00505684114a\",\"sid\": \"a996a11d-a74f-4987-8360-98008cb68330\"},\"body\": {\"operationType\": \"%s\",\"applicationId\": \"267460398254241115979192\",\"applicationVerificationCode\": \"1\",\"queueId\": \"%s\",\"previousQueueId\": \"%s\",\"channel\": \"CBOL\",\"applicationGroup\": \"%s\",\"customerType\": \"N\",\"firstInitiatorApplicationID\": \"%s\",\"createdDate\": \"2019-08-10T03:27:27.722Z\",\"fileNumber\": \"4685234\",\"trackingId\": \"6673285297\",\"promotionCode\": \"ADL123\",\"createdBy\": \"ROSS\"}}}";
 	private static final String SAMPLE_INPUT="{\"event\": {\"header\": {\"businessCode\": \"GCB\",\"timeStamp\": \"2019-08-13 17:36:10 GMT\",\"producerCSI\": \"172109\",\"countrycode\": \"US\",\"name\": \"RossApplication\",\"channel\": \"MIDAS\",\"transactionTime\": \"2019-08-13 17:36:10 GMT\",\"version\": \"1.0\",\"uuid\": \"8efa5c10-dd29-11e8-8da0-00505684114a\",\"sid\": \"a996a11d-a74f-4987-8360-98008cb68330\"},\"body\": {\"operationType\": \"I\",\"applicationId\": \"267460398254241115979192\",\"applicationVerificationCode\": \"1\",\"queueId\": \"ROAD\",\"previousQueueId\": null,\"channel\": \"CBOL\",\"applicationGroup\": \"GOOGLE\",\"customerType\": \"N\",\"firstInitiatorApplicationID\": \"901\",\"createdDate\": \"2019-08-10T03:27:27.722Z\",\"fileNumber\": \"4685234\",\"trackingId\": \"6673285297\",\"promotionCode\": \"ADL123\",\"createdBy\": \"ROSS\"}}}";
 	private static final String SAMPLE_INPUT2="{\"event\": {\"header\": {\"businessCode\": \"GCB\",\"timeStamp\": \"2019-08-13 17:36:10 GMT\",\"producerCSI\": \"172109\",\"countrycode\": \"US\",\"name\": \"RossApplication\",\"channel\": \"MIDAS\",\"transactionTime\": \"2019-08-13 17:36:10 GMT\",\"version\": \"1.0\",\"uuid\": \"8efa5c10-dd29-11e8-8da0-00505684114a\",\"sid\": \"a996a11d-a74f-4987-8360-98008cb68330\"},\"body\": {\"operationType\": \"U\",\"applicationId\": \"267460398254241115979192\",\"applicationVerificationCode\": \"1\",\"queueId\": \"ROCF\",\"previousQueueId\": \"ROAD\",\"channel\": \"CBOL\",\"applicationGroup\": \"GOOGLE\",\"customerType\": \"N\",\"firstInitiatorApplicationID\": \"901\",\"createdDate\": \"2019-08-10T03:27:27.722Z\",\"fileNumber\": \"4685234\",\"trackingId\": \"6673285297\",\"promotionCode\": \"ADL123\",\"createdBy\": \"ROSS\"}}}";
-	
+
 	private static final String APP_ID = "I_STR_MIDAS_A_MDB_01_EHTEST";
 	private static final String GRP_ID = "I_STR_MIDAS_A_MDB_01_EHTEST";
 	private static final String RESET_OFFSET = "latest";
@@ -84,14 +84,12 @@ public class ApplicationTest {
 	private static final String PROPERTY_GROUP_ID = "spring.cloud.stream.kafka.streams.binder.configuration.group.id";
 	private static final String PROPERTY_OFFSET_RESET = "spring.cloud.stream.kafka.streams.binder.configuration.consumer.auto.offset.reset";
 	private static final String FALSE = "false";
-	private static final String INVALID_MESSAGE = "{\"INVALIDFIELD\":\"CRS Fusion\",\"EVENTNAME2\":\"PG_CARD_LOGIN_THIN\",\"DEVICEPROCESSID_INVALID\":\"166944\",\"DEVICEVENDOR_2\":\"Citi Applications\",\"METRICSNAME_p\":\"SEL_DP_EN_DPID_DV_COUNT\",\"VALUE_2\":1\"DESCRIPTION_5\":\"Metrics on SEL -> DeviceProduct -> EventName -> DeviceProcessId -> DeviceVendor\",\"WINDOW_START_uu\":\"1589958120000\"}";
-	
 	private static final int POLL_TIME = 20;
 
 	private static Producer<String, JsonNode> producer;
 	private static Consumer<String, String> consumer;
 	private static ObjectMapper mapper= new ObjectMapper();
-	
+
 	@ClassRule
 	public static final EmbeddedKafkaRule embedded = new EmbeddedKafkaRule(1, Boolean.TRUE,1,INPUT_TOPIC,OUTPUT_TOPIC);
 
@@ -134,25 +132,25 @@ public class ApplicationTest {
 		consumer.subscribe(Collections.singletonList(topic));
 		consumer.poll(Duration.ofSeconds(POLL_TIME));
 	}
-	
+
 	private static String setJsonValuesForInput(String operationType, String queueId, String previousQueueId, String applicationGroup, String firstInitiatorApplicationID) {
 		return String.format(MODIFY_INPUT ,operationType,queueId,previousQueueId,applicationGroup,firstInitiatorApplicationID);
 	}
-	
+
 	@Test
 	public void testingJson1() throws InterruptedException, ExecutionException, JsonMappingException, JsonProcessingException {
 		JsonNode node1= mapper.readTree(SAMPLE_INPUT);
 		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC, node1)).get().hasOffset());
 		TimeUnit.MILLISECONDS.sleep(30000);
 	}
-	
+
 	@Test
 	public void testingJsonWithKey() throws InterruptedException, ExecutionException, JsonMappingException, JsonProcessingException {
 		JsonNode node1= mapper.readTree(SAMPLE_INPUT);
 		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,"Midas_AO", node1)).get().hasOffset());
 		TimeUnit.MILLISECONDS.sleep(30000);
 	}
-	
+
 	@Test
 	public void testingJsonWithUpdateOperation() throws InterruptedException, ExecutionException, JsonMappingException, JsonProcessingException {
 		setConsumer(OUTPUT_TOPIC);
@@ -165,56 +163,56 @@ public class ApplicationTest {
 		});
 		consumer.close();
 	}
-	
+
 	@Test
 	public void testingJsonWithInsertOperation() throws InterruptedException, ExecutionException, JsonMappingException, JsonProcessingException {
-		
+
 		setConsumer(OUTPUT_TOPIC);
 		logger.info("Testing with Insert operation, pended apps and 2 records sent");	
 		JsonNode node1= mapper.readTree(setJsonValuesForInput("I", "ROAD", "", "GOOGLE", "901"));
-		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,null, node1)).get().hasOffset());
-		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,null, node1)).get().hasOffset());
+		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,"SampleKey", node1)).get().hasOffset());
+		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,"SampleKey", node1)).get().hasOffset());
 		ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(POLL_TIME));
 		TimeUnit.MILLISECONDS.sleep(30000);
 		records.forEach(record -> {
 			assertNotNull(record.value());
-				try {
-					JsonNode outputNode= mapper.readTree(record.value());
-					assertEquals(2, outputNode.get("applicationsSubmitted"));
-				} catch (JsonMappingException e) {
-				
-					e.printStackTrace();
-				} catch (JsonProcessingException e) {
-					
-					e.printStackTrace();
-				}
-			
-			
-			
+			try {
+				JsonNode outputNode= mapper.readTree(record.value());
+				assertEquals(2, outputNode.get("applicationsSubmitted"));
+			} catch (JsonMappingException e) {
+
+				e.printStackTrace();
+			} catch (JsonProcessingException e) {
+
+				e.printStackTrace();
+			}
+
+
+
 		});
-		
+
 		consumer.close();
 	}
-	
+
 	@Test
 	public void testingJsonWithBothUperations() throws JsonMappingException, JsonProcessingException, InterruptedException, ExecutionException {
-		
+
 		setConsumer(OUTPUT_TOPIC);
 		JsonNode node1= mapper.readTree(setJsonValuesForInput("I", "ROAD", "", "GOOGLE", "901"));
 		JsonNode node2= mapper.readTree(setJsonValuesForInput("U", "ROCF", "ROAD", "GOOGLE", "901"));
-		
+
 		logger.info("Testing with Insert operation, pended apps and 5 records sent");
-		
+
 		for(int i=0;i<5;i++) {
-			assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC, node1)).get().hasOffset());
+			assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,null, node1)).get().hasOffset());
 		}
-		
+
 		logger.info("Testing with Update operation from pended to approved apps and 2 records sent");
-		
-      for(int i=0;i<2;i++) {
-    	  assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC, node2)).get().hasOffset());
+
+		for(int i=0;i<2;i++) {
+			assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,null, node2)).get().hasOffset());
 		}
-		
+
 		ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(POLL_TIME));
 		TimeUnit.MILLISECONDS.sleep(30000);
 		records.forEach(record -> {
@@ -225,42 +223,57 @@ public class ApplicationTest {
 				assertEquals(2, outputNode.get("applicationsApproved"));
 				assertEquals(3, outputNode.get("applicationsPended"));
 			} catch (JsonMappingException e) {
-			
+
 				e.printStackTrace();
 			} catch (JsonProcessingException e) {
-				
+
 				e.printStackTrace();
 			}
 		});
 		consumer.close();
 	}
-	
-	
+
+
 	@Test
 	public void testingYMLConfigs() {
 		assertEquals("file://./src/test/resources/udf_conditions.json", eventPayloadConfigurationYML.getCategorization());
 		assertNotNull(outputConfiguration.getOutputFormat());	
 	}
-	
+
 	@Test
 	public void testFilterService() throws JsonMappingException, JsonProcessingException {
+		logger.info("Testing other filter conditions");
 		JsonNode node1= mapper.readTree(setJsonValuesForInput("I", "APAO", "", "GOOGLE", "901"));
 		JsonNode node2= mapper.readTree(setJsonValuesForInput("I", "APAO", "", "ANOTHERPRODUCT", "901"));
 		assertTrue(appService.filterEvents(eventPayloadConfigurationYML.getFilters(), node1));
 		assertTrue(appService.filterEvents(null, node1));
 		assertFalse(appService.filterEvents(eventPayloadConfigurationYML.getFilters(), node2));	
 	}
-	
+
 	@Test
 	public void testApplicationStatusEvaluation() throws JsonMappingException, JsonProcessingException {
 		JsonNode node1= mapper.readTree(setJsonValuesForInput("I", "APAO", "", "GOOGLE", "901"));
 		JsonNode node2= mapper.readTree(setJsonValuesForInput("C", "APAO", "ROAD", "GOOGLE", "901"));
 		JsonNode node3= mapper.readTree(setJsonValuesForInput("I", "RODR", "", "GOOGLE", "901"));
+		JsonNode node4= mapper.readTree(setJsonValuesForInput("I", "RORR", "", "GOOGLE", "901"));
+		JsonNode node5= mapper.readTree(setJsonValuesForInput("C", "APAO", "RORR", "GOOGLE", "901"));
+		JsonNode node6= mapper.readTree(setJsonValuesForInput("I", "", "", "GOOGLE", "901"));
+		JsonNode node7= mapper.readTree(setJsonValuesForInput("C", "ROAD", "ROFR", "GOOGLE", "901"));
 		assertEquals("applications_approved", resultsExtractor.extractResultsFromData(node1, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
 		assertEquals("applications_pended", resultsExtractor.extractResultsFromData(node2, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
 		assertEquals("applications_approved", resultsExtractor.extractResultsFromData(node2, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
 		assertEquals("applications_declined", resultsExtractor.extractResultsFromData(node3, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
-		
+
+		logger.info("Testing other applicationStatus conditions");
+		assertEquals("null", resultsExtractor.extractResultsFromData(node4, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
+		assertEquals("null", resultsExtractor.extractResultsFromData(node5, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
+		assertEquals("null", resultsExtractor.extractResultsFromData(node6, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
+		assertEquals("null", resultsExtractor.extractResultsFromData(node6, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
+		assertEquals("applications_pended", resultsExtractor.extractResultsFromData(node7, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
+		assertEquals("applications_pended", resultsExtractor.extractResultsFromData(node7, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
+
+
+
 	}
 }
-	
+

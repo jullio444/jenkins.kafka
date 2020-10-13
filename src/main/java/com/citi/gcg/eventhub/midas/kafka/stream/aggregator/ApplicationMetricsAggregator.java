@@ -22,11 +22,16 @@ import org.slf4j.LoggerFactory;
 
 import com.citi.gcg.eventhub.midas.config.yml.EventPayloadConfigurationYML;
 import com.citi.gcg.eventhub.midas.constants.ApplicationMetricsConstants;
-import com.citi.gcg.eventhub.midas.constants.ResultsExtractorConstants;
 import com.citi.gcg.eventhub.midas.service.ResultsExtractor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/***
+ * A Custom aggregator class to do aggregation on the payload and send back the result to transformer
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode, JsonNode> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationMetricsAggregator.class);
@@ -45,12 +50,12 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 		ResultsExtractor resultsExtractor= new ResultsExtractor();
 
 		Map<String, String> typeStatus = resultsExtractor.extractResultsFromData(value, eventPayloadConfigurationYML.getConditions());
-		System.err.println("Type Status: "+typeStatus);
+		LOGGER.info("ApplicationMetricsAggregator - apply: result from evaluation : {}", typeStatus.toString());
 
 		if(!typeStatus.isEmpty()) {
 
 			String currentApplicationStatus = typeStatus.get(ApplicationMetricsConstants.CURRENT_APPLICATION_STATUS);
-			LOGGER.info("ApplicationMetricsAggregator - apply: Current Application Status Recieved: {}", currentApplicationStatus);
+			LOGGER.debug("ApplicationMetricsAggregator - apply: Current Application Status Recieved: {}", currentApplicationStatus);
 
 			String previousApplicationStatus = typeStatus.get(ApplicationMetricsConstants.PREVIOUS_APPLICATION_STATUS);
 			LOGGER.debug("ApplicationMetricsAggregator - apply: Previous Application Status Recieved: {}", currentApplicationStatus);
@@ -61,8 +66,7 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 			if(applicationOperation.equals(ApplicationMetricsConstants.APPLICATION_OPERATION_NEW)) {
 				objectNode.put(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED, objectNode.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt() + 1);
 			}
-			if((currentApplicationStatus!=null )
-					&& (previousApplicationStatus!=null)) {
+			if((currentApplicationStatus!=null ) && (previousApplicationStatus!=null)) {
 				if(!currentApplicationStatus.equals(previousApplicationStatus)) {
 					objectNode.put(currentApplicationStatus, objectNode.get(currentApplicationStatus).asInt() + 1);
 					if(!applicationOperation.equals(ApplicationMetricsConstants.APPLICATION_OPERATION_NEW)) {

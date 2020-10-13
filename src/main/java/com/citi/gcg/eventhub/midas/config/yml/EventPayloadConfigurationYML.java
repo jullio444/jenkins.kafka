@@ -1,22 +1,24 @@
 /*
-* Copyright (C) 2016 by Citigroup. All rights reserved.
-* Citigroup claims copyright in this computer program as an unpublished work,
-* one or more versions of which were first used to provide services to
-* customers on the dates indicated in the foregoing notice. Claim of
-* copyright does not imply waiver of other rights.
-*
-* NOTICE OF PROPRIETARY RIGHTS
-*
-* This program is a confidential trade secret and the property of Citigroup.
-* Use, examination, reproduction, disassembly, decompiling, transfer and/or
-* disclosure to others of all or any part of this software program are
-* strictly prohibited except by express written agreement with Citigroup.
-*/
+ * Copyright (C) 2016 by Citigroup. All rights reserved.
+ * Citigroup claims copyright in this computer program as an unpublished work,
+ * one or more versions of which were first used to provide services to
+ * customers on the dates indicated in the foregoing notice. Claim of
+ * copyright does not imply waiver of other rights.
+ *
+ * NOTICE OF PROPRIETARY RIGHTS
+ *
+ * This program is a confidential trade secret and the property of Citigroup.
+ * Use, examination, reproduction, disassembly, decompiling, transfer and/or
+ * disclosure to others of all or any part of this software program are
+ * strictly prohibited except by express written agreement with Citigroup.
+ */
 package com.citi.gcg.eventhub.midas.config.yml;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,7 +28,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /***
- * EventPayaload configuration class for fetching the required conditions Json for evauluating the payload
+ * EventPayaload configuration class for fetching the required conditions Json for evaluating the payload
  * 
  * @author EventHub Dev Team
  *
@@ -35,13 +37,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ConfigurationProperties(value=AppYmlConfigConstants.EVENT_PAYLOAD_YML_PREFIX)
 public class EventPayloadConfigurationYML {
 
+	private static final  Logger LOGGER = LoggerFactory.getLogger(EventPayloadConfigurationYML.class);
+
 	private String categorization;
-	
+
 	private JsonNode filters;
-	
+
 	private JsonNode conditions;
-	
+
 	public EventPayloadConfigurationYML() {
+		//Default constructor
 	}
 
 	public String getCategorization() {
@@ -50,35 +55,41 @@ public class EventPayloadConfigurationYML {
 
 	public void setCategorization(String categorization) {
 		this.categorization = categorization;
-		
+
 		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = categorization;
-		
-		JsonNode filters = null;
-		JsonNode conditions = null;
-		
+
+		JsonNode innerFilters = null;
+		JsonNode innerconditions = null;
+
 		if(categorization.startsWith(AppYmlConfigConstants.FILE_PREFIX)) {
 			try {
-				jsonString = new String(Files.readAllBytes(Paths.get(categorization.substring(AppYmlConfigConstants.FILE_PREFIX.length()))));
-				JsonNode jsonObj = mapper.readTree(jsonString);
-				
+
+				LOGGER.trace("EventPayloadConfigurationYML: loading of the conditions JSON file {} ",categorization);
+
+				categorization = new String(Files.readAllBytes(Paths.get(categorization.substring(AppYmlConfigConstants.FILE_PREFIX.length()))));
+				JsonNode jsonObj = mapper.readTree(categorization);
 				if(jsonObj.has(AppYmlConfigConstants.CONST_FILTERS)) {
-					filters = jsonObj.get(AppYmlConfigConstants.CONST_FILTERS);
+					innerFilters = jsonObj.get(AppYmlConfigConstants.CONST_FILTERS);
+				}else {
+					LOGGER.info("EventPayloadConfigurationYML: there are no filters provided in the conditions JSON");
 				}
-				
+
 				if(jsonObj.has(AppYmlConfigConstants.CONST_CONDITIONS)) {
-					conditions = jsonObj.get(AppYmlConfigConstants.CONST_CONDITIONS);
+					innerconditions = jsonObj.get(AppYmlConfigConstants.CONST_CONDITIONS);
 				}else {
 					throw new MetricsApplicationException("Conditions not provided for metrics.");
 				}
-				
+
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("EventPayloadConfigurationYML: unable to parse the JSON due to the exception {}", e.getLocalizedMessage());
 			}
+		}else {
+
+			LOGGER.warn("EventPayloadConfigurationYML: the prefix of conditions JSON file doesn't match with {}", AppYmlConfigConstants.FILE_PREFIX," , hence provide the correct configuration");
 		}
-		
-		setFilters(filters);
-		setConditions(conditions);
+
+		setFilters(innerFilters);
+		setConditions(innerconditions);
 	}
 
 	public JsonNode getFilters() {
@@ -96,5 +107,5 @@ public class EventPayloadConfigurationYML {
 	public void setConditions(JsonNode conditions) {
 		this.conditions = conditions;
 	}
-	
+
 }

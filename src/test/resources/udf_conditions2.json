@@ -1,0 +1,1 @@
+{"filters": {"filterType": "all","conditions": [{"field": "event.body.applicationGroup","value": "GOOGLE"},{"field": "event.body.firstInitiatorApplicationID","value": "901"}]}}

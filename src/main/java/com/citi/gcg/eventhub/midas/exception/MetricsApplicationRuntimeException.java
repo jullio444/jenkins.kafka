@@ -14,6 +14,13 @@
 */
 package com.citi.gcg.eventhub.midas.exception;
 
+/***
+ * 
+ * A custom RunTimeexception class to throw RuntimeException in ResultsExtractor class
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 public class MetricsApplicationRuntimeException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;

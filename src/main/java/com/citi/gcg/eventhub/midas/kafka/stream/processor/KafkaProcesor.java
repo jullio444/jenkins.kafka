@@ -1,3 +1,17 @@
+/*
+* Copyright (C) 2016 by Citigroup. All rights reserved.
+* Citigroup claims copyright in this computer program as an unpublished work,
+* one or more versions of which were first used to provide services to
+* customers on the dates indicated in the foregoing notice. Claim of
+* copyright does not imply waiver of other rights.
+*
+* NOTICE OF PROPRIETARY RIGHTS
+*
+* This program is a confidential trade secret and the property of Citigroup.
+* Use, examination, reproduction, disassembly, decompiling, transfer and/or
+* disclosure to others of all or any part of this software program are
+* strictly prohibited except by express written agreement with Citigroup.
+*/
 package com.citi.gcg.eventhub.midas.kafka.stream.processor;
 
 import java.time.ZoneId;
@@ -21,7 +35,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 /***
  * 
  * It is a kafka processor class which uses the transformed data and make it into required JSON structure, 
- *  Finally it will be sending to another kafka topic
+ *  finally it will be sending to another kafka topic
  * @author EventHub Dev Team
  *
  */
@@ -29,7 +43,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Configuration
 public class KafkaProcesor implements Processor<String, JsonNode> {
 
-	private static final  Logger logger = LoggerFactory.getLogger(KafkaProcesor.class);
+	private static final  Logger LOGGER = LoggerFactory.getLogger(KafkaProcesor.class);
 
 	private static final String DATE_TIME_FORMAT = "MM-dd-yyyy'T'HH:mm:ss z";
 	private ObjectNode output;
@@ -49,9 +63,9 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 	@Override
 	public void init(ProcessorContext context) {
 		this.context = context;
-        
-		logger.info("loading the required json as output node");
-		
+
+		LOGGER.info("KafkaProcesor- loading the required json as output node");
+
 		output = (ObjectNode) outputConfiguration.getDailyOutputJsonObj();
 
 		headerTimeZone = ZoneId.of(TimeZone.getTimeZone(outputConfiguration.getHeaderFormatTimeZone()).toZoneId().toString());
@@ -66,15 +80,11 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 
 	@Override
 	public void process(String key, JsonNode value) {
-		switch (key) {
-		case AppAOConstants.METRIC:
+		if (key.equalsIgnoreCase(AppAOConstants.METRIC)) {
 			updateDailyOutput(value);
 			String message = output.toString();
-			logger.info("1 minute metrics: {}", message);
+			LOGGER.info("KafkaProcesor process- 1 minute metrics: {}", message);
 			kProducer.sendMessage(kafkaStreamsConfigurationYML.getOutputTopic(), message);
-			break;
-		default:
-			break;
 		}
 		context.commit();
 	}

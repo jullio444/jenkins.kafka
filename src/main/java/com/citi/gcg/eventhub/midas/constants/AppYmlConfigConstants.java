@@ -14,6 +14,13 @@
 */
 package com.citi.gcg.eventhub.midas.constants;
 
+/***
+ * AppYmlConfig Constants Class for loading the configurations from YML file
+ * 
+ * @author EventHub Dev Team
+ *
+ */
+
 public class AppYmlConfigConstants {
 
 	public static final String EVENT_PAYLOAD_YML_PREFIX = "eventhub.payload.metrics.conditions";
@@ -24,12 +31,6 @@ public class AppYmlConfigConstants {
 
 	public static final String CONST_CONDITIONS = "conditions";
 	public static final String CONST_FILTERS = "filters";
-	public static final String CONST_FILTER_TYPE = "filterType";
-	public static final String CONST_FIELD = "field";
-	public static final String CONST_VALUE = "value";
-
-	public static final String CONDITION_ALL = "ALL";
-	public static final String CONDITION_ANY = "ANY";
 
 	private AppYmlConfigConstants() {}
 

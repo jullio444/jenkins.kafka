@@ -26,6 +26,8 @@ import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.state.Stores;
 import org.apache.kafka.streams.state.WindowBytesStoreSupplier;
 import org.apache.kafka.streams.state.WindowStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -46,10 +48,19 @@ import com.citi.gcg.eventhub.midas.kafka.stream.transformer.MetricsTransformer;
 import com.citi.gcg.eventhub.midas.service.AppService;
 import com.fasterxml.jackson.databind.JsonNode;
 
+/***
+ * Kafka Streams class that read the data from input topic 
+ * and does filtering, aggregation, transformation and processing to create the required output Json
+ * 
+ * @author EventHub Dev Team
+ *
+ */
 @EnableBinding(KafkaEventProcessor.class)
 @EnableIntegration
 @EnableAutoConfiguration
 public class AppKafkaStream {
+
+	private static final  Logger LOGGER = LoggerFactory.getLogger(AppKafkaStream.class);
 
 	@Autowired
 	private AppService appService;
@@ -77,11 +88,11 @@ public class AppKafkaStream {
 	}
 
 	@KafkaStreamsStateStore(name = ApplicationMetricsConstants.TRANSFORMER_STATSTORE, type = StoreType.KEYVALUE, keySerde = ApplicationMetricsConstants.KEY_SERDE, valueSerde = ApplicationMetricsConstants.VALUE_SERDE)
-	@StreamListener(KafkaEventProcessor.INPUT_TOPIC)
+	@StreamListener(ApplicationMetricsConstants.INPUT_TOPIC)
 	public void proccess(KStream<String, JsonNode> stream) {
 		stream
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))
-		.selectKey((k,v) -> k = filertNullKey(k))
+		.selectKey((k,v) -> k = filtertNullKey(k))
 		.groupByKey()
 		.windowedBy(TimeWindows.of(Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds())))
 		.aggregate(new MetricInitializer(), 
@@ -92,17 +103,25 @@ public class AppKafkaStream {
 		.process(() -> new KafkaProcesor(outputConfiguration,kafkaStreamsConfigurationYML,kProducer));
 	}
 	
-	private String filertNullKey(String k) {
+	private String filtertNullKey(String k) {
+		LOGGER.trace("AppKafkaStream:filtertNullKey - Handling the null key scenario");
 		return k == null ? "EH-Aggregation" : k;
 	}
 
 	protected WindowBytesStoreSupplier getSupplier(String stateStoreName) {
+		
+		LOGGER.info("AppKafkaStream:getSupplier - Configuring statestore {} with retention {} and window size {}",
+				stateStoreName,kafkaStreamsConfigurationYML.getCleanUpPolicy(),kafkaStreamsConfigurationYML.getWindowSizeSeconds());
 		return Stores.persistentWindowStore(stateStoreName, 
 				Duration.ofDays(kafkaStreamsConfigurationYML.getCleanUpPolicy()), 
 				Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds()), Boolean.FALSE);
 	}
 
 	protected Materialized<String, JsonNode, WindowStore<Bytes, byte[]>> materialized(String stateStoreName) {
+		
+		LOGGER.info("AppKafkaStream:materialized - Configuring statestore {} with KeySerde as StringSerde and ValueSerde as JSONSerde",
+				stateStoreName);
+		
 		Materialized<String, JsonNode, WindowStore<Bytes, byte[]>> stateStoreWindowed = Materialized
 				.as(getSupplier(stateStoreName));
 		stateStoreWindowed.withKeySerde(Serdes.String());

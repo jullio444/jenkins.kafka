@@ -23,6 +23,8 @@ import org.apache.kafka.streams.kstream.Windowed;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.processor.PunctuationType;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.citi.gcg.eventhub.midas.config.yml.KafkaStreamsConfigurationYML;
 import com.citi.gcg.eventhub.midas.constants.ApplicationMetricsConstants;
@@ -30,7 +32,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/***
+ * 
+ * It is a kafka Transformer class which takes the data from aggregator and consolidate for the minutes window, 
+ * finally the consolidate metrics will be forwarded to processor class
+ * @author EventHub Dev Team
+ *
+ */
 public class MetricsTransformer implements Transformer<Windowed<String>, JsonNode, KeyValue<String, JsonNode>> {
+
+	private static final  Logger LOGGER = LoggerFactory.getLogger(MetricsTransformer.class);
 
 	private static final String METRICS_KEY = "metric";
 
@@ -122,6 +133,8 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		if (metrics == null)
 			metrics = (ObjectNode) outputInitialization();
 		this.context.forward(METRICS_KEY, metrics);	
+
+		LOGGER.debug("MetricsTransformer:forwardMetric - the consolidated data {} for the minute being sending to processor", metrics.toString());
 		metricsStateStore.put(METRICS_KEY, outputInitialization());	
 	}
 
