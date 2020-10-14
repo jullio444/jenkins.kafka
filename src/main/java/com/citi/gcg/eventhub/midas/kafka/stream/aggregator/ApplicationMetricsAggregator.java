@@ -50,7 +50,7 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 		ResultsExtractor resultsExtractor= new ResultsExtractor();
 
 		Map<String, String> typeStatus = resultsExtractor.extractResultsFromData(value, eventPayloadConfigurationYML.getConditions());
-		LOGGER.info("ApplicationMetricsAggregator - apply: result from evaluation : {}", typeStatus.toString());
+		LOGGER.info("ApplicationMetricsAggregator - apply: result from evaluation : {}", typeStatus);
 
 		if(!typeStatus.isEmpty()) {
 
