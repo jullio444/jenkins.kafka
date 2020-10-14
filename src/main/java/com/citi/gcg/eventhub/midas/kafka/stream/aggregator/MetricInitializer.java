@@ -45,7 +45,7 @@ public class MetricInitializer implements  Initializer<JsonNode>{
 		node.put(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED, 0);
 		node.put(ResultsExtractorConstants.STRING_NULL, 0);
 
-		LOGGER.trace("MetricInitializer:apply - Initializing the metrics output node {}", node.toString());
+		LOGGER.trace("MetricInitializer:apply - Initializing the metrics output node {}", node);
 
 		return node;
 	}

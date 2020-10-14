@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
 properties = {"server.port=1"})
 @ActiveProfiles("fail")
-public class ApplicationTestFail {
+public class ApplicationFailTest {
 
 
 	@Autowired
@@ -39,7 +39,7 @@ public class ApplicationTestFail {
 	@Autowired
 	OutputConfiguration outputConfiguration;
 
-	private static final  Logger logger = LoggerFactory.getLogger(ApplicationTestFail.class);
+	private static final  Logger logger = LoggerFactory.getLogger(ApplicationFailTest.class);
 	private static final String MODIFY_INPUT ="{\"event\": {\"header\": {\"businessCode\": \"GCB\",\"timeStamp\": \"2019-08-13 17:36:10 GMT\",\"producerCSI\": \"172109\",\"countrycode\": \"US\",\"name\": \"RossApplication\",\"channel\": \"MIDAS\",\"transactionTime\": \"2019-08-13 17:36:10 GMT\",\"version\": \"1.0\",\"uuid\": \"8efa5c10-dd29-11e8-8da0-00505684114a\",\"sid\": \"a996a11d-a74f-4987-8360-98008cb68330\"},\"body\": {\"operationType\": \"%s\",\"applicationId\": \"267460398254241115979192\",\"applicationVerificationCode\": \"1\",\"queueId\": \"%s\",\"previousQueueId\": \"%s\",\"channel\": \"CBOL\",\"applicationGroup\": \"%s\",\"customerType\": \"N\",\"firstInitiatorApplicationID\": \"%s\",\"createdDate\": \"2019-08-10T03:27:27.722Z\",\"fileNumber\": \"4685234\",\"trackingId\": \"6673285297\",\"promotionCode\": \"ADL123\",\"createdBy\": \"ROSS\"}}}";
 	private static ObjectMapper mapper= new ObjectMapper();
 	private static String setJsonValuesForInput(String operationType, String queueId, String previousQueueId, String applicationGroup, String firstInitiatorApplicationID) {

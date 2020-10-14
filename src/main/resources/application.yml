@@ -1,24 +1,21 @@
----      
-eventhub: 
+---
+eventhub:
   configuration:
-    kstreams:  
+    kstreams:
       windowSizeSeconds: 60
       cleanUpPolicy: 3
       outputTopic: nam.us.all.derived.midas.ao.metrics
   payload:
-    metrics:  
+    metrics:
       conditions:
         categorization: file://./src/main/resources/udf_conditions.json
-        dateValidateField: createdDate
-        
-config: 
+        dateValidateField: createdDate  
+config:
   output:
     outputFormat: '{ "name" : "MIDAS_ROSS", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"MINUTE", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 2, "applicationsApproved": 2, "applicationsPended": 2, "applicationsDeclined": 2}'
     headerFormatTimeZone: UTC
-    bodyFormatTimeZone: CST
-    
 spring:
-  application: 
+  application:
     name: EventHub-MIDAS_AO-Realtime-Metrics
   kafka:
     bootstrap-servers: sd-2e07-e38a:9092,sd-ab2b-d7f2:9092,sd-e129-26ef:9092
@@ -34,7 +31,7 @@ spring:
       bootstrap-servers: sd-2e07-e38a:9092,sd-ab2b-d7f2:9092,sd-e129-26ef:9092
       client-id: EventHub-MIDAS_AO-Realtime-Metrics-Producer
       retries: 3
-      properties: 
+      properties:
         key.serializer: org.apache.kafka.common.serialization.StringSerializer
         value.serializer: org.apache.kafka.common.serialization.StringSerializer
 

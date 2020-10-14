@@ -85,7 +85,7 @@ public class EventPayloadConfigurationYML {
 			}
 		}else {
 
-			LOGGER.warn("EventPayloadConfigurationYML: the prefix of conditions JSON file doesn't match with {}", AppYmlConfigConstants.FILE_PREFIX," , hence provide the correct configuration");
+			LOGGER.warn("EventPayloadConfigurationYML: the prefix of conditions JSON file doesn't match with {} ,hence provide the correct configuration", AppYmlConfigConstants.FILE_PREFIX);
 		}
 
 		setFilters(innerFilters);

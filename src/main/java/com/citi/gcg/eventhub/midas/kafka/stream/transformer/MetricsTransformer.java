@@ -134,7 +134,7 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 			metrics = (ObjectNode) outputInitialization();
 		this.context.forward(METRICS_KEY, metrics);	
 
-		LOGGER.debug("MetricsTransformer:forwardMetric - the consolidated data {} for the minute being sending to processor", metrics.toString());
+		LOGGER.debug("MetricsTransformer:forwardMetric - the consolidated data {} for the minute being sending to processor", metrics);
 		metricsStateStore.put(METRICS_KEY, outputInitialization());	
 	}
 

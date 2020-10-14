@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 @Service
 public class AppService {
 
-	private static final  Logger LOGGER = LoggerFactory.getLogger(KafkaProcesor.class);
+	private static final  Logger LOGGER = LoggerFactory.getLogger(AppService.class);
 	public boolean filterEvents(JsonNode filters, JsonNode data) {
 		ResultsExtractor resultsExtractor = new ResultsExtractor();
 		if((filters != null) && (filters.size() > 0)) {
