@@ -78,6 +78,12 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 
 	}
 
+	
+	/***
+	 * It is an override method process of kafka processor interface 
+	 * to convert the metrics received from transformer in a required JSON structure
+	 * @param key, value
+	 */
 	@Override
 	public void process(String key, JsonNode value) {
 		if (key.equalsIgnoreCase(AppAOConstants.METRIC)) {
@@ -89,6 +95,10 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 		context.commit();
 	}
 
+	/***
+	 * It keeps updates the output JSON for every minute
+	 * @param value
+	 */
 	private void updateDailyOutput(JsonNode value) {
 
 		ZonedDateTime headerDate = ZonedDateTime.now(headerTimeZone);
@@ -97,6 +107,11 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 		output.put(ApplicationMetricsConstants.TOTAL_APPROVED, value.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt());
 		output.put(ApplicationMetricsConstants.TOTAL_DECLINED, value.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt());
 		output.put(ApplicationMetricsConstants.TOTAL_PENDED, value.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED, value.get(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED, value.get(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, value.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_SAVINGS, value.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, value.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt());
 	}
 
 	@Override

@@ -37,6 +37,12 @@ public class KProducer {
 	@Autowired
 	private KafkaTemplate<String,String> kafkaTemplate;
 	
+	
+	/***
+	 * Method to responsible for sending the metrics to the derived topic
+	 * @param topic
+	 * @param message
+	 */
 	public void sendMessage(String topic, String message){
 		
 		 ListenableFuture<SendResult<String, String>> future = 

@@ -28,6 +28,8 @@ public class ApplicationMetricsConstants {
 	public static final String INPUT_TOPIC = "data-input";
 	public static final  String CURRENT_APPLICATION_STATUS = "applicationStatus";
 	public static final  String PREVIOUS_APPLICATION_STATUS = "previousApplicationStatus";
+	public static final  String ACCOUNT_TYPE = "accountType";
+	public static final  String ACCOUNT_OPENED = "accountOpen";
 	public static final  String APPLICATION_OPERATION = "applicationOperation";
 	public static final  String APPLICATION_OPERATION_NEW = "I";
 	public static final  String APPLICATION_OPERATION_UPDATE = "U";
@@ -42,12 +44,25 @@ public class ApplicationMetricsConstants {
 	public static final String AGGREGATOR_PENDED = "applications_pended";
 	public static final String AGGREGATOR_DECLINED = "applications_declined";
 	public static final String AGGREGATOR_SUBMITTED = "applications_submitted";
+	public static final String AGGREGATOR_PENDING_TO_DECLINED = "pended_declined";
+	public static final String AGGREGATOR_PENDING_TO_APPROVED = "pended_approved";
 
 	public static final String TOTAL_APPLICATIONS = "applicationsSubmitted";
 	public static final String TOTAL_APPROVED = "applicationsApproved";
 	public static final String TOTAL_PENDED = "applicationsPended";
 	public static final String TOTAL_DECLINED = "applicationsDeclined";
+	public static final String TOTAL_PENDEDTODECLINED = "applicationsPendedToDeclined";
+	public static final String TOTAL_PENDEDTOAPPROVED = "applicationsPendedToApproved";
 
+	public static final String AGGREGATOR_SAVINGS = "accounts_savings";
+	public static final String AGGREGATOR_CHECKINGS = "accounts_checkings";
+
+	public static final String TOTAL_ACCOUNTS = "totalAccountsOpened";
+	public static final String TOTAL_SAVINGS = "totalSavingsAccountsOpened";
+	public static final String TOTAL_CHECKINGS = "totalCheckingAccountsOpened";
+	public static final String ACCOUNT_STATUS = "accountStatus";
+	
+	
 	
 	private ApplicationMetricsConstants() {}
 	

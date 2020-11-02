@@ -53,6 +53,12 @@ public class EventPayloadConfigurationYML {
 		return categorization;
 	}
 
+	/***
+	 *  This method to fetch the conditions Json file from configuration YML 
+	 *  and divide its filters and conditions separately which used for payload evaluation
+	 *  
+	 * @param categorization
+	 */
 	public void setCategorization(String categorization) {
 		this.categorization = categorization;
 

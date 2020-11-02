@@ -40,12 +40,12 @@ public class ApplicationFailTest {
 	OutputConfiguration outputConfiguration;
 
 	private static final  Logger logger = LoggerFactory.getLogger(ApplicationFailTest.class);
-	private static final String MODIFY_INPUT ="{\"event\": {\"header\": {\"businessCode\": \"GCB\",\"timeStamp\": \"2019-08-13 17:36:10 GMT\",\"producerCSI\": \"172109\",\"countrycode\": \"US\",\"name\": \"RossApplication\",\"channel\": \"MIDAS\",\"transactionTime\": \"2019-08-13 17:36:10 GMT\",\"version\": \"1.0\",\"uuid\": \"8efa5c10-dd29-11e8-8da0-00505684114a\",\"sid\": \"a996a11d-a74f-4987-8360-98008cb68330\"},\"body\": {\"operationType\": \"%s\",\"applicationId\": \"267460398254241115979192\",\"applicationVerificationCode\": \"1\",\"queueId\": \"%s\",\"previousQueueId\": \"%s\",\"channel\": \"CBOL\",\"applicationGroup\": \"%s\",\"customerType\": \"N\",\"firstInitiatorApplicationID\": \"%s\",\"createdDate\": \"2019-08-10T03:27:27.722Z\",\"fileNumber\": \"4685234\",\"trackingId\": \"6673285297\",\"promotionCode\": \"ADL123\",\"createdBy\": \"ROSS\"}}}";
+	private static final String MODIFY_APPLICATION_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"%s\",\"partnerId\": \"%s\",\"status\": \"APPLICATION_RECEIVED\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"previous_status\": \"%s\",\"status\": \"%s\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
 	private static ObjectMapper mapper= new ObjectMapper();
-	private static String setJsonValuesForInput(String operationType, String queueId, String previousQueueId, String applicationGroup, String firstInitiatorApplicationID) {
-		return String.format(MODIFY_INPUT ,operationType,queueId,previousQueueId,applicationGroup,firstInitiatorApplicationID);
+	
+	private static String setJsonValuesForInput(String tenatId, String partnerId, String previousStatus, String status) {
+		return String.format(MODIFY_APPLICATION_INPUT ,tenatId,partnerId,previousStatus,status);
 	}
-
 
 	@Test
 	public void testingYMLConfigs() {
@@ -75,12 +75,13 @@ public class ApplicationFailTest {
 
 		logger.info("Testing with the conditions JSON which contains filterType as any in filters section");
 		eventPayloadConfigurationYML.setCategorization("file://./src/test/resources/udf_conditions5.json");
-		JsonNode node1= mapper.readTree(setJsonValuesForInput("I", "ROAD", "ROFR", "GOOGLE", "901"));
-		JsonNode node2= mapper.readTree(setJsonValuesForInput("insert", "ROAD", "ROFR", "GOOGLE", "901"));
+		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "SOMETHING", "APPLICATION_RECEIVED"));
+		JsonNode node2= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "", "APPLICATION_RECEIVED"));
 		assertEquals("I", resultsExtractor.extractResultsFromData(node1, eventPayloadConfigurationYML.getConditions()).get("applicationOperation"));
 		assertEquals("I", resultsExtractor.extractResultsFromData(node2, eventPayloadConfigurationYML.getConditions()).get("applicationOperation"));
 	}
 
+	
 	@Test
 	public void testExceptionTest() {
 		MetricsApplicationRuntimeException exception = new MetricsApplicationRuntimeException("EXCEPTION");

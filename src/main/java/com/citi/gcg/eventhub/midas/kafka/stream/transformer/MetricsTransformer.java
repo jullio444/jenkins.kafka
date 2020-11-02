@@ -78,6 +78,9 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 
 	}
 
+	/***
+	 * It is an override method tranform of the Transformer Interface which calls for updating the transformer statestore.
+	 */
 	@Override
 	public KeyValue<String, JsonNode> transform(Windowed<String> key, JsonNode value) {
 
@@ -104,30 +107,49 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		result.put(ApplicationMetricsConstants.AGGREGATOR_PENDED, result.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt());
 		result.put(ApplicationMetricsConstants.AGGREGATOR_DECLINED, result.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt());
 		result.put(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED, result.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt());
-
+		result.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED, result.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED).asInt());
+		result.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED, result.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED).asInt());
+		result.put(ApplicationMetricsConstants.AGGREGATOR_SAVINGS, result.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt());
+		result.put(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS, result.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt());
+		result.put(ApplicationMetricsConstants.ACCOUNT_OPENED, result.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt() - old.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt());
+		
 		return result;
 	}
 
+	/***
+	 * It is a method to update the statestore with the metric valus received from aggregator
+	 * @param value
+	 */
 	private void updateStateStore(JsonNode value) {
 		ObjectNode previous = (ObjectNode) metricsStateStore.get(METRICS_KEY);
 		if (previous == null)
 			previous = (ObjectNode) outputInitialization();
-
+        
 		int approved = value.get(ApplicationMetricsConstants.AGGREGATOR_APPROVED).asInt();
 		int declined = value.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt();
 		int pended = value.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt();
 		int submitted = value.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt();
-
+		int pendedToDeclined = value.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED).asInt();
+		int pendedToApproved = value.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED).asInt();
+		int savingAccounts = value.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt();
+		int checkingAccounts =value.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt();
+		int totalAccounts = value.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt();
 
 		previous.put(ApplicationMetricsConstants.TOTAL_APPLICATIONS, previous.get(ApplicationMetricsConstants.TOTAL_APPLICATIONS).asInt() + submitted);
 		previous.put(ApplicationMetricsConstants.TOTAL_APPROVED, previous.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt() + approved);
 		previous.put(ApplicationMetricsConstants.TOTAL_PENDED, previous.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt() + pended);
 		previous.put(ApplicationMetricsConstants.TOTAL_DECLINED, previous.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt() + declined);
-
+		previous.put(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED, previous.get(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED).asInt() + pendedToDeclined);
+		previous.put(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED, previous.get(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED).asInt() + pendedToApproved);
+		previous.put(ApplicationMetricsConstants.TOTAL_SAVINGS, previous.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt() + savingAccounts);
+		previous.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, previous.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt() + checkingAccounts);
+		previous.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, previous.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt() + totalAccounts);
 		metricsStateStore.put(METRICS_KEY, previous);
 	}
 
-
+    /***
+     * It is a Method which takes the latest metrics from state store and forwarding it to processor.
+     */
 	private void forwardMetric() {
 		ObjectNode metrics = (ObjectNode) metricsStateStore.get(METRICS_KEY);
 		if (metrics == null)
@@ -144,6 +166,11 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		node.put(ApplicationMetricsConstants.TOTAL_APPROVED, 0);
 		node.put(ApplicationMetricsConstants.TOTAL_PENDED, 0);
 		node.put(ApplicationMetricsConstants.TOTAL_DECLINED, 0);
+		node.put(ApplicationMetricsConstants.TOTAL_SAVINGS, 0);
+		node.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, 0);
+		node.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, 0);
+		node.put(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED, 0);
+		node.put(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED, 0);
 		return node;
 	}
 

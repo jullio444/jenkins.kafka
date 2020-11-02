@@ -1,1 +1,133 @@
-{"filters": {"filterType": "all","conditions": [{"field": "event.body.applicationGroup",value": "GOOGLE"},{"field": "event.body.firstInitiatorApplicationID","value": "901"}]},"conditions": {"applicationOperation": {"I": {"filterType": "all","conditions": [{"field": "event.body.operationType","value": "I"}]},"U":{"filterType": "all","conditions": [{"field": "event.body.operationType","value": "U"}]}},"applicationStatus": {"applications_approved": {"filterType": "all","conditions": [{"field": "event.body.queueId","value": "ROCF|APAO"}]},"applications_pended": {"filterType": "all","conditions": [{"field": "event.body.queueId","value": "ROFCF|ROAD|ROFR|SDNQ|ROER"}]},"applications_declined": {"filterType": "all","conditions": [{"field": "event.body.queueId","value": "ROCC|CCSDN|RODR|ROFD"}]}},"previousApplicationStatus": {"applications_approved": {"filterType": "all","conditions": [{"field": "event.body.previousQueueId","value": "ROCF|APAO"}]},"applications_pended": {"filterType": "all","conditions": [{"field": "event.body.previousQueueId","value": "ROFCF|ROAD|ROFR|SDNQ|ROER"}]},"applications_declined": {"filterType": "all","conditions": [{"field": "event.body.previousQueueId","value": "ROCC|CCSDN|RODR|ROFD"}]}}}}
+{
+	"filters": {
+		"filterType": "all",
+		"conditions": [
+			{
+				"field": "event.header.custom.partnerId",
+				"value: "GOOGLE"
+			},
+			{
+				"field": "event.header.custom.tenantId",
+				"value": "MIDAS"
+			}
+		]
+	},
+	"conditions": {
+		"applicationOperation": {
+			"I": {
+				"filterType": "all",
+				"conditions": [
+					{
+						"field": "event.body.status",
+						"value": "APPLICATION_RECEIVED"
+					}
+				]
+			}
+		},
+	"applicationStatus": {
+		"applications_approved": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.status",
+					"value": "APPLICATION_APPROVED"
+				}
+			]
+		},
+		"applications_pended": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.status",
+					"value": "APPLICATION_RECEIVED|APPLICATION_PENDED_ON_ADDITIONAL_DOCS|APPLICATION_PENDED_MANUAL_REVIEW|KBA_REQUESTED"
+				}
+			]
+		},
+		"applications_declined": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.status",
+					"value": "APPLICATION_DECLINED"
+				}
+			]
+		}
+	},
+	"previousApplicationStatus": {
+		"applications_approved": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.previous_status",
+					"value": "APPLICATION_APPROVED"
+				}
+			]
+		},
+		"applications_pended": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.previous_status",
+					"value": "APPLICATION_RECEIVED|APPLICATION_PENDED_ON_ADDITIONAL_DOCS|APPLICATION_PENDED_MANUAL_REVIEW|KBA_REQUESTED"
+				}
+			]
+		},
+		"applications_declined": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.previous_status",
+					"value": "APPLICATION_DECLINED"
+				}
+			]
+		}
+	},
+	"accountStatus": {
+		"accountOpen": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.status",
+					"value": "OPENED"
+				}
+			]
+		}
+	},
+	"accountType": {
+		"accounts_savings": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.status",
+					"value": "OPENED"
+				},
+				{
+					"field": "event.body.type",
+					"value": "071"
+				},
+				{
+					"field": "event.body.class",
+					"value": "009"
+				}
+			]
+		},
+		"accounts_checkings": {
+			"filterType": "all",
+			"conditions": [
+				{
+					"field": "event.body.status",
+					"value": "OPENED"
+				},
+				{
+					"field": "event.body.type",
+					"value": "038"
+				},
+				{
+					"field": "event.body.class",
+					"value": "001"
+				}
+			]
+		}
+	}
+}
+}
