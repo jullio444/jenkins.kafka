@@ -8,11 +8,11 @@ eventhub:
   payload:
     metrics:
       conditions:
-        categorization: file://./src/main/resources/udf_conditions.json
+        categorization: file://./src/main/resources/udf_conditions_orchestration.json
         dateValidateField: createdDate  
 config:
   output:
-    outputFormat: '{ "name" : "MIDAS_ROSS", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"MINUTE", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 2, "applicationsApproved": 2, "applicationsPended": 2, "applicationsDeclined": 2}'
+    outputFormat: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"MINUTE", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0,"applicationsPendedToDeclined": 0, "applicationsPendedToApproved": 0, "totalAccountsOpened": 0,"totalSavingsAccountsOpened":0, "totalCheckingAccountsOpened":0}'
     headerFormatTimeZone: UTC
 spring:
   application:
@@ -30,7 +30,6 @@ spring:
     producer:
       bootstrap-servers: sd-2e07-e38a:9092,sd-ab2b-d7f2:9092,sd-e129-26ef:9092
       client-id: EventHub-MIDAS_AO-Realtime-Metrics-Producer
-      retries: 3
       properties:
         key.serializer: org.apache.kafka.common.serialization.StringSerializer
         value.serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -45,7 +44,7 @@ spring:
           binder:
             brokers: sd-2e07-e38a:9092,sd-ab2b-d7f2:9092,sd-e129-26ef:9092
             configuration:
-              application.id: I_STR_MIDAS_AO_A_EI_01_EH
+              application.id: I_STR_MIDAS_AO_A_EI_04_EH
               commit.interval.ms: 1000
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde

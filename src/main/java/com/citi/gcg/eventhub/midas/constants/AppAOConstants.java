@@ -28,8 +28,11 @@ public class AppAOConstants {
 	public static final String METRICS_APP_PENDED = "applicationsPended";
 	public static final String METRICS_APP_DECLINED = "applicationsDeclined";
 	public static final String TRANSACTIONDATETIME = "transactionDateTime";
+	public static final String METRICS_TOTAL_ACCOUNTS = "totalAccountsOpened";
+	public static final String METRICS_SAVINGS_ACCOUNTS = "totalSavingsAccountsOpened";
+	public static final String METRICS_CHECKING_ACCOUNTS = "totalCheckingAccountsOpened";
 	public static final String METRIC= "metric";
-	
+
 	private AppAOConstants() {}
 	
 }

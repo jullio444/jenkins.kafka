@@ -42,6 +42,11 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 		this.eventPayloadConfigurationYML = eventPayloadConfigurationYML;
 	}
 
+	/***
+	 * It is to override the apply method of aggregator Interface to take the data from input kafka streams 
+	 * after filtering to do required aggregations
+	 * @return JsonNode
+	 */
 	@Override
 	public JsonNode apply(String key, JsonNode value, JsonNode aggregate) {
 
@@ -63,17 +68,19 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 			String applicationOperation = typeStatus.get(ApplicationMetricsConstants.APPLICATION_OPERATION);
 			LOGGER.debug("ApplicationMetricsAggregator - apply: Application Operation: {}", applicationOperation);
 
-			if(applicationOperation.equals(ApplicationMetricsConstants.APPLICATION_OPERATION_NEW)) {
-				objectNode.put(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED, objectNode.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt() + 1);
-			}
-			if((currentApplicationStatus!=null ) && (previousApplicationStatus!=null)) {
-				if(!currentApplicationStatus.equals(previousApplicationStatus)) {
-					objectNode.put(currentApplicationStatus, objectNode.get(currentApplicationStatus).asInt() + 1);
-					if(!applicationOperation.equals(ApplicationMetricsConstants.APPLICATION_OPERATION_NEW)) {
-						objectNode.put(previousApplicationStatus, objectNode.get(previousApplicationStatus).asInt(0) - 1);	
-					}
-						 
-				}
+			String accountOpened= typeStatus.get(ApplicationMetricsConstants.ACCOUNT_STATUS);
+			LOGGER.debug("ApplicationMetricsAggregator - apply: accountOpened status: {}", accountOpened);
+
+			String typeOfAccount = typeStatus.get(ApplicationMetricsConstants.ACCOUNT_TYPE);
+			LOGGER.debug("ApplicationMetricsAggregator - apply: Type of account : {}", typeOfAccount);
+
+			objectNode = applicationMetrics(applicationOperation,currentApplicationStatus,previousApplicationStatus,objectNode);
+
+			if(accountOpened!=null) {
+
+				objectNode.put(accountOpened, objectNode.get(accountOpened).asInt()+1);
+
+				objectNode.put(typeOfAccount, objectNode.get(typeOfAccount).asInt()+1);
 			}
 
 
@@ -81,6 +88,44 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 
 
 		return aggregate;
+	}
+
+	/***
+	 * It is to insert the required application metrics depends on the status details received from payload evaluation
+	 * @param applicationOperation
+	 * @param currentApplicationStatus
+	 * @param previousApplicationStatus
+	 * @param objectNode
+	 * @return objectNode
+	 */
+	private ObjectNode applicationMetrics(String applicationOperation, String currentApplicationStatus,
+			String previousApplicationStatus, ObjectNode objectNode) {
+		if(applicationOperation.equals(ApplicationMetricsConstants.APPLICATION_OPERATION_NEW)) {
+			objectNode.put(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED, objectNode.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt() + 1);
+		}
+		if((currentApplicationStatus!=null ) && (previousApplicationStatus!=null) && (!currentApplicationStatus.equals(previousApplicationStatus))) {
+			objectNode.put(currentApplicationStatus, objectNode.get(currentApplicationStatus).asInt() + 1);
+			if(!applicationOperation.equals(ApplicationMetricsConstants.APPLICATION_OPERATION_NEW)) {
+				objectNode.put(previousApplicationStatus, objectNode.get(previousApplicationStatus).asInt(0) - 1);	
+			}
+
+			if(previousApplicationStatus.equalsIgnoreCase(ApplicationMetricsConstants.AGGREGATOR_PENDED)) {
+
+				switch(currentApplicationStatus) {
+				case ApplicationMetricsConstants.AGGREGATOR_DECLINED:  objectNode.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED, 
+						objectNode.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED).asInt()+1);
+				break;
+				case ApplicationMetricsConstants.AGGREGATOR_APPROVED: objectNode.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED, 
+						objectNode.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED).asInt()+1);
+				break;
+				
+				default:
+
+				}
+			}
+
+		}
+		return objectNode;
 	}
 
 }

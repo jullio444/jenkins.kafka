@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 /***
  * 
  * It is payload evaluation class where it checks the filters and conditions against the payload,
- * finally provides the filteredout and application status details
+ * finally provides the filtersResult and application status details
  * @author EventHub Dev Team
  *
  */
@@ -45,6 +45,12 @@ public class ResultsExtractor {
 		return processForExtractResultsFromData(data, conditionInput);
 	}
 
+	/***
+	 * It will evaluate the payload with the given filters and send back the evaluation result to kafka stream
+	 * @param data
+	 * @param filters
+	 * @return boolean
+	 */
 	public boolean filterMatch(JsonNode data, JsonNode filters) {
 		
 		
@@ -75,6 +81,12 @@ public class ResultsExtractor {
 
 	}
 
+	/***
+	 * It is a method which calls other method which does the payload evaluation for given conditions
+	 * @param dataJsonObject
+	 * @param conditionsJsonObject
+	 * @return Map
+	 */
 	private Map<String, String> processForExtractResultsFromData(JsonNode dataJsonObject,
 			JsonNode conditionsJsonObject) {
 
@@ -110,11 +122,9 @@ public class ResultsExtractor {
 					result = resultValue;
 					break;
 				}
-			}else if(filterType.equalsIgnoreCase(ResultsExtractorConstants.CONDITION_ANY)) {
-				if(conditionSuccessCount >= ResultsExtractorConstants.CONST_ONE) {
+			}else if(filterType.equalsIgnoreCase(ResultsExtractorConstants.CONDITION_ANY) && (conditionSuccessCount >= ResultsExtractorConstants.CONST_ONE)) {
 					result = resultValue;
 					break;
-				}
 			}
 		}
 

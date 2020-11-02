@@ -87,6 +87,12 @@ public class AppKafkaStream {
 		this.outputConfiguration = outputConfiguration;
 	}
 
+	
+	/***
+	 * It is the method responsible for consuming the events from input topic and 
+	 * required processing 
+	 * @param stream
+	 */
 	@KafkaStreamsStateStore(name = ApplicationMetricsConstants.TRANSFORMER_STATSTORE, type = StoreType.KEYVALUE, keySerde = ApplicationMetricsConstants.KEY_SERDE, valueSerde = ApplicationMetricsConstants.VALUE_SERDE)
 	@StreamListener(ApplicationMetricsConstants.INPUT_TOPIC)
 	public void proccess(KStream<String, JsonNode> stream) {
@@ -103,6 +109,11 @@ public class AppKafkaStream {
 		.process(() -> new KafkaProcesor(outputConfiguration,kafkaStreamsConfigurationYML,kProducer));
 	}
 	
+	/***
+	 * It is to handle the null key values
+	 * @param k
+	 * @return String
+	 */
 	private String filtertNullKey(String k) {
 		LOGGER.trace("AppKafkaStream:filtertNullKey - Handling the null key scenario");
 		return k == null ? "EH-Aggregation" : k;
@@ -117,6 +128,11 @@ public class AppKafkaStream {
 				Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds()), Boolean.FALSE);
 	}
 
+	/***
+	 * It is to configure the statestore with the required parameters.
+	 * @param stateStoreName
+	 * @return Materialized
+	 */
 	protected Materialized<String, JsonNode, WindowStore<Bytes, byte[]>> materialized(String stateStoreName) {
 		
 		LOGGER.info("AppKafkaStream:materialized - Configuring statestore {} with KeySerde as StringSerde and ValueSerde as JSONSerde",

@@ -35,6 +35,11 @@ public class MetricInitializer implements  Initializer<JsonNode>{
 
 	private static final  Logger LOGGER = LoggerFactory.getLogger(MetricInitializer.class);
 
+	/***
+	 * It is to override the apply method of Initializer Interface for 
+	 * initializing the required metrics for aggregation
+	 * @return JsonNode
+	 */
 	@Override
 	public JsonNode apply() {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -43,8 +48,12 @@ public class MetricInitializer implements  Initializer<JsonNode>{
 		node.put(ApplicationMetricsConstants.AGGREGATOR_DECLINED, 0);
 		node.put(ApplicationMetricsConstants.AGGREGATOR_PENDED, 0);
 		node.put(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED, 0);
+		node.put(ApplicationMetricsConstants.AGGREGATOR_SAVINGS, 0);
+		node.put(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS, 0);
+		node.put(ApplicationMetricsConstants.ACCOUNT_OPENED, 0);
+		node.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED, 0);
+		node.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED, 0);
 		node.put(ResultsExtractorConstants.STRING_NULL, 0);
-
 		LOGGER.trace("MetricInitializer:apply - Initializing the metrics output node {}", node);
 
 		return node;
