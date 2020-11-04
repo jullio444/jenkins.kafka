@@ -46,7 +46,7 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 
 	private static final  Logger LOGGER = LoggerFactory.getLogger(KafkaProcesor.class);
 
-	private static final String DATE_TIME_FORMAT = "MM-dd-yyyy'T'HH:mm:ss z";
+	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	private ObjectNode output;
 	
 	@Autowired
@@ -84,6 +84,9 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 		output.put(AppAOConstants.METRICS_APP_DECLINED, ApplicationMetricsConstants.TOTAL_DECLINED);
 		output.put(AppAOConstants.METRICS_APP_PENDED, ApplicationMetricsConstants.TOTAL_PENDED);
 		output.put(AppAOConstants.METRICS_APP_SUBMITTED, ApplicationMetricsConstants.TOTAL_APPLICATIONS);
+		output.put(AppAOConstants.METRICS_TOTAL_ACCOUNTS, ApplicationMetricsConstants.TOTAL_ACCOUNTS);
+		output.put(AppAOConstants.METRICS_SAVINGS_ACCOUNTS, ApplicationMetricsConstants.TOTAL_SAVINGS);
+		output.put(AppAOConstants.METRICS_CHECKING_ACCOUNTS, ApplicationMetricsConstants.TOTAL_CHECKINGS);
 
 	}
 
