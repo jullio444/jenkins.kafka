@@ -51,8 +51,6 @@ public class MetricInitializer implements  Initializer<JsonNode>{
 		node.put(ApplicationMetricsConstants.AGGREGATOR_SAVINGS, 0);
 		node.put(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS, 0);
 		node.put(ApplicationMetricsConstants.ACCOUNT_OPENED, 0);
-		node.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED, 0);
-		node.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED, 0);
 		node.put(ResultsExtractorConstants.STRING_NULL, 0);
 		LOGGER.trace("MetricInitializer:apply - Initializing the metrics output node {}", node);
 

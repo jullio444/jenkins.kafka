@@ -3,11 +3,7 @@
 		"filterType": "all",
 		"conditions": [
 			{
-				"field": "event.header.custom.partnerId",
-				"value: "GOOGLE"
-			},
-			{
-				"field": "event.header.custom.tenantId",
+				"field": "event.header.custom.tenantId"
 				"value": "MIDAS"
 			}
 		]

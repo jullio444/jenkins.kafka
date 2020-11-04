@@ -107,8 +107,6 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		result.put(ApplicationMetricsConstants.AGGREGATOR_PENDED, result.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt());
 		result.put(ApplicationMetricsConstants.AGGREGATOR_DECLINED, result.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt());
 		result.put(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED, result.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt());
-		result.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED, result.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED).asInt());
-		result.put(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED, result.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED).asInt());
 		result.put(ApplicationMetricsConstants.AGGREGATOR_SAVINGS, result.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt());
 		result.put(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS, result.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt());
 		result.put(ApplicationMetricsConstants.ACCOUNT_OPENED, result.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt() - old.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt());
@@ -129,8 +127,6 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		int declined = value.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt();
 		int pended = value.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt();
 		int submitted = value.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt();
-		int pendedToDeclined = value.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_DECLINED).asInt();
-		int pendedToApproved = value.get(ApplicationMetricsConstants.AGGREGATOR_PENDING_TO_APPROVED).asInt();
 		int savingAccounts = value.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt();
 		int checkingAccounts =value.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt();
 		int totalAccounts = value.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt();
@@ -139,8 +135,6 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		previous.put(ApplicationMetricsConstants.TOTAL_APPROVED, previous.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt() + approved);
 		previous.put(ApplicationMetricsConstants.TOTAL_PENDED, previous.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt() + pended);
 		previous.put(ApplicationMetricsConstants.TOTAL_DECLINED, previous.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt() + declined);
-		previous.put(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED, previous.get(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED).asInt() + pendedToDeclined);
-		previous.put(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED, previous.get(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED).asInt() + pendedToApproved);
 		previous.put(ApplicationMetricsConstants.TOTAL_SAVINGS, previous.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt() + savingAccounts);
 		previous.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, previous.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt() + checkingAccounts);
 		previous.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, previous.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt() + totalAccounts);
@@ -169,8 +163,6 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		node.put(ApplicationMetricsConstants.TOTAL_SAVINGS, 0);
 		node.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, 0);
 		node.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, 0);
-		node.put(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED, 0);
-		node.put(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED, 0);
 		return node;
 	}
 

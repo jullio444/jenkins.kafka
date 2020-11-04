@@ -12,7 +12,7 @@ eventhub:
         
 config: 
   output:
-    outputFormat: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"MINUTE", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0,"applicationsPendedToDeclined": 0, "applicationsPendedToApproved": 0, "totalAccountsOpened": 0,"totalSavingsAccountsOpened":0, "totalCheckingAccountsOpened":0}'
+    outputFormat: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"MINUTE", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0, "totalAccountsOpened": 0,"totalSavingsAccountsOpened":0, "totalCheckingsAccountsOpened":0}'
     headerFormatTimeZone: UTC
     
 spring:
@@ -45,7 +45,7 @@ spring:
           binder:
             brokers: 127.0.0.1:51817
             configuration: 
-              application.id: I_STR_MIDAS_A_MDB_02_EHTEST
+              application.id: I_STR_MIDAS_A_MDB_03_EHTEST
               commit.interval.ms: 1000             
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde

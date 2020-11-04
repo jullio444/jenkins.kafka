@@ -55,37 +55,37 @@ properties = {"server.port=1"})
 public class ApplicationTest {
 
 	@Autowired
-	StreamsBuilderFactoryBean streamsBuilderFactoryBean;
+	private StreamsBuilderFactoryBean streamsBuilderFactoryBean;
 
 	@Autowired
-	EventPayloadConfigurationYML eventPayloadConfigurationYML;
+	private EventPayloadConfigurationYML eventPayloadConfigurationYML;
 
 	@Autowired
-	OutputConfiguration outputConfiguration;
+	private OutputConfiguration outputConfiguration;
 
 	@Autowired
-	AppService appService;
+	private AppService appService;
 
 	@Autowired
-	ResultsExtractor resultsExtractor;
+	private ResultsExtractor resultsExtractor;
 
 	private static final  Logger logger = LoggerFactory.getLogger(ApplicationTest.class);
 	private static final String INPUT_TOPIC = "nam.us.retailbank.digital.raw.ross-application";
 	private static final String OUTPUT_TOPIC = "nam.us.all.derived.midas.ao.metrics";
 
-	private static final String SAMPLE_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\",\"partnerId\": \"GOOGLE\",\"status\": \"APPLICATION_RECEIVED\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"previous_status\": \"\",\"status\": \"APPLICATION_RECEIVED\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
+	private static final String SAMPLE_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"previousStatus\": \"\",\"status\": \"APPLICATION_RECEIVED\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
 	
 	
-	private static final String MODIFY_APPLICATION_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"%s\",\"partnerId\": \"%s\",\"status\": \"APPLICATION_RECEIVED\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"previous_status\": \"%s\",\"status\": \"%s\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
+	private static final String MODIFY_APPLICATION_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"%s\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"previousStatus\": \"%s\",\"status\": \"%s\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
 	
-	private static final String ACCOUNT_OPEN_SAMPLE1="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\",\"partnerId\": \"GOOGLE\",\"status\": \"OPENED\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"previous_status\": \"APPROVED\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"071\",\"class\": \"009\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
-	private static final String ACCOUNT_OPEN_SAMPLE2="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\",\"partnerId\": \"GOOGLE\",\"status\": \"OPENED\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"previous_status\": \"APPROVED\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"038\",\"class\": \"001\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
-	private static final String ACCOUNT_OPEN_SAMPLE3="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\",\"partnerId\": \"GOOGLE\",\"status\": \"OPENED\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"previous_status\": \"APPROVED\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"004\",\"class\": \"038\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
+	private static final String ACCOUNT_OPEN_SAMPLE1="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"previousStatus\": \"APPROVED\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"071\",\"class\": \"009\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
+	private static final String ACCOUNT_OPEN_SAMPLE2="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"previousStatus\": \"APPROVED\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"038\",\"class\": \"001\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
+	private static final String ACCOUNT_OPEN_SAMPLE3="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"previousStatus\": \"APPROVED\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"004\",\"class\": \"038\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
 	
 
 
-	private static final String APP_ID = "I_STR_MIDAS_A_MDB_01_EHTEST";
-	private static final String GRP_ID = "I_STR_MIDAS_A_MDB_01_EHTEST";
+	private static final String APP_ID = "I_STR_MIDAS_A_MDB_02_EHTEST";
+	private static final String GRP_ID = "I_STR_MIDAS_A_MDB_02_EHTEST";
 	private static final String RESET_OFFSET = "latest";
 	private static final String PROPERTY_BROKERS = "spring.cloud.stream.kafka.streams.binder.brokers";
 	private static final String PROPERTY_APP_ID= "spring.cloud.stream.kafka.streams.binder.configuration.application.id";
@@ -141,8 +141,8 @@ public class ApplicationTest {
 		consumer.poll(Duration.ofSeconds(POLL_TIME));
 	}
 
-	private static String setJsonValuesForInput(String tenatId, String partnerId, String previousStatus, String status) {
-		return String.format(MODIFY_APPLICATION_INPUT ,tenatId,partnerId,previousStatus,status);
+	private static String setJsonValuesForInput(String tenatId , String previousStatus, String status) {
+		return String.format(MODIFY_APPLICATION_INPUT ,tenatId,previousStatus,status);
 	}
 
 	@Test
@@ -162,7 +162,7 @@ public class ApplicationTest {
 	@Test
 	public void testingJsonWithUpdateOperation() throws InterruptedException, ExecutionException, JsonMappingException, JsonProcessingException {
 		setConsumer(OUTPUT_TOPIC);
-		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
+		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,null, node1)).get().hasOffset());
 		ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(POLL_TIME));
 		TimeUnit.MILLISECONDS.sleep(30000);
@@ -177,7 +177,7 @@ public class ApplicationTest {
 
 		setConsumer(OUTPUT_TOPIC);
 		logger.info("Testing with applicationSubmitted, pended apps and 2 records sent");	
-		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", null, "APPLICATION_RECEIVED"));
+		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", null, "APPLICATION_RECEIVED"));
 		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,"SampleKey", node1)).get().hasOffset());
 		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC,"SampleKey", node1)).get().hasOffset());
 		ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(POLL_TIME));
@@ -206,9 +206,9 @@ public class ApplicationTest {
 	public void testingJsonWithBothUperations() throws JsonMappingException, JsonProcessingException, InterruptedException, ExecutionException {
 
 		setConsumer(OUTPUT_TOPIC);
-		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "", "APPLICATION_RECEIVED"));
-		JsonNode node2= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
-		JsonNode node3= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "APPLICATION_DECLINED"));
+		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "", "APPLICATION_RECEIVED"));
+		JsonNode node2= mapper.readTree(setJsonValuesForInput("MIDAS", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
+		JsonNode node3= mapper.readTree(setJsonValuesForInput("MIDAS", "APPLICATION_RECEIVED", "APPLICATION_DECLINED"));
 
 		logger.info("Testing with application submitted, pended apps and 5 records sent");
 
@@ -237,8 +237,7 @@ public class ApplicationTest {
 				assertEquals(5, outputNode.get("applicationsSubmitted"));
 				assertEquals(2, outputNode.get("applicationsApproved"));
 				assertEquals(2, outputNode.get("applicationsPended"));
-				assertEquals(2, outputNode.get("applicationsPendedToApproved"));
-				assertEquals(1, outputNode.get("applicationsPendedToDeclined"));
+				assertEquals(1, outputNode.get("applicationsDeclined"));
 			} catch (JsonMappingException e) {
 
 				e.printStackTrace();
@@ -267,7 +266,7 @@ public class ApplicationTest {
 				JsonNode outputNode= mapper.readTree(record.value());
 				assertEquals(2, outputNode.get("totalAccountsOpened"));
 				assertEquals(1, outputNode.get("totalSavingsAccountsOpened"));
-				assertEquals(1, outputNode.get("totalCheckingAccountsOpened"));
+				assertEquals(1, outputNode.get("totalCheckingsAccountsOpened"));
 			} catch (JsonMappingException e) {
 
 				e.printStackTrace();
@@ -291,8 +290,8 @@ public class ApplicationTest {
 	@Test
 	public void testFilterService() throws JsonMappingException, JsonProcessingException {
 		logger.info("Testing other filter conditions");
-		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
-		JsonNode node2= mapper.readTree(setJsonValuesForInput("MIDAS", "ANOTHER_PRODUCT", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
+		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS","APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
+		JsonNode node2= mapper.readTree(setJsonValuesForInput("ANOTHER", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 		assertTrue(appService.filterEvents(eventPayloadConfigurationYML.getFilters(), node1));
 		assertTrue(appService.filterEvents(null, node1));
 		assertFalse(appService.filterEvents(eventPayloadConfigurationYML.getFilters(), node2));	
@@ -300,13 +299,13 @@ public class ApplicationTest {
 
 	@Test
 	public void testApplicationStatusEvaluation() throws JsonMappingException, JsonProcessingException {
-		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
-		JsonNode node2= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
-		JsonNode node3= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "APPLICATION_DECLINED"));
-		JsonNode node4= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "INVALID_STATUS"));
-		JsonNode node5= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "INVALID_PREVIOUS_STATUS", "APPLICATION_APPROVED"));
-		JsonNode node6= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "INVALID_PREVIOUS_STATUS", "INVALID_STATUS"));
-		JsonNode node7= mapper.readTree(setJsonValuesForInput("MIDAS", "GOOGLE", "APPLICATION_RECEIVED", "APPLICATION_PENDED_ON_ADDITIONAL_DOCS"));
+		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
+		JsonNode node2= mapper.readTree(setJsonValuesForInput("MIDAS", "APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
+		JsonNode node3= mapper.readTree(setJsonValuesForInput("MIDAS", "APPLICATION_RECEIVED", "APPLICATION_DECLINED"));
+		JsonNode node4= mapper.readTree(setJsonValuesForInput("MIDAS",  "APPLICATION_RECEIVED", "INVALID_STATUS"));
+		JsonNode node5= mapper.readTree(setJsonValuesForInput("MIDAS", "INVALID_PREVIOUS_STATUS", "APPLICATION_APPROVED"));
+		JsonNode node6= mapper.readTree(setJsonValuesForInput("MIDAS",  "INVALID_PREVIOUS_STATUS", "INVALID_STATUS"));
+		JsonNode node7= mapper.readTree(setJsonValuesForInput("MIDAS",  "APPLICATION_RECEIVED", "APPLICATION_PENDED_ON_ADDITIONAL_DOCS"));
 		assertEquals("applications_approved", resultsExtractor.extractResultsFromData(node1, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
 		assertEquals("applications_pended", resultsExtractor.extractResultsFromData(node2, eventPayloadConfigurationYML.getConditions()).get("previousApplicationStatus"));
 		assertEquals("applications_approved", resultsExtractor.extractResultsFromData(node2, eventPayloadConfigurationYML.getConditions()).get("applicationStatus"));
