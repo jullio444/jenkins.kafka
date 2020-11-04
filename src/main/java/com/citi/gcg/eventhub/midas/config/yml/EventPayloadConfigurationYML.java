@@ -55,7 +55,7 @@ public class EventPayloadConfigurationYML {
 
 	/***
 	 *  This method to fetch the conditions Json file from configuration YML 
-	 *  and divide its filters and conditions separately which used for payload evaluation
+	 *  and divide its filters and conditions separately which will be used for payload evaluation
 	 *  
 	 * @param categorization
 	 */

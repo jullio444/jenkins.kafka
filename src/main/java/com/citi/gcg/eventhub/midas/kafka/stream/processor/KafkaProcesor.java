@@ -23,6 +23,7 @@ import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import com.citi.gcg.eventhub.midas.config.yml.KafkaStreamsConfigurationYML;
@@ -47,9 +48,17 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 
 	private static final String DATE_TIME_FORMAT = "MM-dd-yyyy'T'HH:mm:ss z";
 	private ObjectNode output;
+	
+	@Autowired
 	private OutputConfiguration outputConfiguration;
-	KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML;
-	KProducer kProducer;
+	
+	@Autowired
+	private KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML;
+	
+	
+	@Autowired
+	private KProducer kProducer;
+	
 	private ZoneId headerTimeZone;
 
 	public KafkaProcesor(OutputConfiguration outputConfiguration,KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML, KProducer kProducer) {
@@ -107,8 +116,6 @@ public class KafkaProcesor implements Processor<String, JsonNode> {
 		output.put(ApplicationMetricsConstants.TOTAL_APPROVED, value.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt());
 		output.put(ApplicationMetricsConstants.TOTAL_DECLINED, value.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt());
 		output.put(ApplicationMetricsConstants.TOTAL_PENDED, value.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt());
-		output.put(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED, value.get(ApplicationMetricsConstants.TOTAL_PENDEDTODECLINED).asInt());
-		output.put(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED, value.get(ApplicationMetricsConstants.TOTAL_PENDEDTOAPPROVED).asInt());
 		output.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, value.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt());
 		output.put(ApplicationMetricsConstants.TOTAL_SAVINGS, value.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt());
 		output.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, value.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt());
