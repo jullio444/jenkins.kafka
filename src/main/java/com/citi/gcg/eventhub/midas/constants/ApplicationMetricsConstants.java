@@ -44,22 +44,19 @@ public class ApplicationMetricsConstants {
 	public static final String AGGREGATOR_PENDED = "applications_pended";
 	public static final String AGGREGATOR_DECLINED = "applications_declined";
 	public static final String AGGREGATOR_SUBMITTED = "applications_submitted";
-	public static final String AGGREGATOR_PENDING_TO_DECLINED = "pended_declined";
-	public static final String AGGREGATOR_PENDING_TO_APPROVED = "pended_approved";
+
 
 	public static final String TOTAL_APPLICATIONS = "applicationsSubmitted";
 	public static final String TOTAL_APPROVED = "applicationsApproved";
 	public static final String TOTAL_PENDED = "applicationsPended";
 	public static final String TOTAL_DECLINED = "applicationsDeclined";
-	public static final String TOTAL_PENDEDTODECLINED = "applicationsPendedToDeclined";
-	public static final String TOTAL_PENDEDTOAPPROVED = "applicationsPendedToApproved";
 
 	public static final String AGGREGATOR_SAVINGS = "accounts_savings";
 	public static final String AGGREGATOR_CHECKINGS = "accounts_checkings";
 
 	public static final String TOTAL_ACCOUNTS = "totalAccountsOpened";
 	public static final String TOTAL_SAVINGS = "totalSavingsAccountsOpened";
-	public static final String TOTAL_CHECKINGS = "totalCheckingAccountsOpened";
+	public static final String TOTAL_CHECKINGS = "totalCheckingsAccountsOpened";
 	public static final String ACCOUNT_STATUS = "accountStatus";
 	
 	

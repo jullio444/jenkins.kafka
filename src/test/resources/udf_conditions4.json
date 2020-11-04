@@ -45,7 +45,7 @@
 			"filterType": "all",
 			"conditions": [
 				{
-					"field": "event.body.previous_status",
+					"field": "event.body.previousStatus",
 					"value": "APPLICATION_APPROVED"
 				}
 			]
@@ -54,7 +54,7 @@
 			"filterType": "all",
 			"conditions": [
 				{
-					"field": "event.body.previous_status",
+					"field": "event.body.previousStatus",
 					"value": "APPLICATION_RECEIVED|APPLICATION_PENDED_ON_ADDITIONAL_DOCS|APPLICATION_PENDED_MANUAL_REVIEW|KBA_REQUESTED"
 				}
 			]
@@ -63,7 +63,7 @@
 			"filterType": "all",
 			"conditions": [
 				{
-					"field": "event.body.previous_status",
+					"field": "event.body.previousStatus",
 					"value": "APPLICATION_DECLINED"
 				}
 			]
