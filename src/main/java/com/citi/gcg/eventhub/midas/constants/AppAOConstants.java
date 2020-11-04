@@ -31,7 +31,7 @@ public class AppAOConstants {
 	public static final String METRICS_TOTAL_ACCOUNTS = "totalAccountsOpened";
 	public static final String METRICS_SAVINGS_ACCOUNTS = "totalSavingsAccountsOpened";
 	public static final String METRICS_CHECKING_ACCOUNTS = "totalCheckingsAccountsOpened";
-	public static final String METRIC= "metric";
+	public static final String METRIC= "metrics";
 
 	private AppAOConstants() {}
 	
