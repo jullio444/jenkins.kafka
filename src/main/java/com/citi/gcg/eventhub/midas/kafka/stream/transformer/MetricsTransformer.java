@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.citi.gcg.eventhub.midas.config.yml.KafkaStreamsConfigurationYML;
+import com.citi.gcg.eventhub.midas.constants.AppAOConstants;
 import com.citi.gcg.eventhub.midas.constants.ApplicationMetricsConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,8 +43,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class MetricsTransformer implements Transformer<Windowed<String>, JsonNode, KeyValue<String, JsonNode>> {
 
 	private static final  Logger LOGGER = LoggerFactory.getLogger(MetricsTransformer.class);
-
-	private static final String METRICS_KEY = "metric";
 
 	private ProcessorContext context;
 
@@ -71,7 +70,7 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 				return false;
 			}
 		};
-		currentJsonAggregator = outputInitialization();
+		currentJsonAggregator = outputInitialization();		
 		this.metricsStateStore = (KeyValueStore<String, JsonNode>) this.context.getStateStore(ApplicationMetricsConstants.TRANSFORMER_STATSTORE);
 		this.context.schedule(Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds()), 
 				PunctuationType.WALL_CLOCK_TIME, currentTime -> forwardMetric());
@@ -119,7 +118,8 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 	 * @param value
 	 */
 	private void updateStateStore(JsonNode value) {
-		ObjectNode previous = (ObjectNode) metricsStateStore.get(METRICS_KEY);
+		ObjectNode previous = (ObjectNode) metricsStateStore.get(AppAOConstants.METRIC);
+		
 		if (previous == null)
 			previous = (ObjectNode) outputInitialization();
         
@@ -138,20 +138,20 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		previous.put(ApplicationMetricsConstants.TOTAL_SAVINGS, previous.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt() + savingAccounts);
 		previous.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, previous.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt() + checkingAccounts);
 		previous.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, previous.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt() + totalAccounts);
-		metricsStateStore.put(METRICS_KEY, previous);
+		metricsStateStore.put(AppAOConstants.METRIC, previous);
 	}
 
     /***
      * It is a Method which takes the latest metrics from state store and forwarding it to processor.
      */
 	private void forwardMetric() {
-		ObjectNode metrics = (ObjectNode) metricsStateStore.get(METRICS_KEY);
+		ObjectNode metrics = (ObjectNode) metricsStateStore.get(AppAOConstants.METRIC);
 		if (metrics == null)
 			metrics = (ObjectNode) outputInitialization();
-		this.context.forward(METRICS_KEY, metrics);	
+		this.context.forward(AppAOConstants.METRIC, metrics);	
 
 		LOGGER.debug("MetricsTransformer:forwardMetric - the consolidated data {} for the minute being sending to processor", metrics);
-		metricsStateStore.put(METRICS_KEY, outputInitialization());	
+		metricsStateStore.put(AppAOConstants.METRIC, outputInitialization());	
 	}
 
 	private JsonNode outputInitialization() {
