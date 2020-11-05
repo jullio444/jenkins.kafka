@@ -15,6 +15,10 @@
 package com.citi.gcg.eventhub.midas.kafka.stream.transformer;
 
 import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.Transformer;
@@ -27,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.citi.gcg.eventhub.midas.config.yml.KafkaStreamsConfigurationYML;
+import com.citi.gcg.eventhub.midas.config.yml.OutputConfiguration;
 import com.citi.gcg.eventhub.midas.constants.AppAOConstants;
 import com.citi.gcg.eventhub.midas.constants.ApplicationMetricsConstants;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -52,11 +57,20 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 
 	private JsonNode currentJsonAggregator;
 
+	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	private ZoneId headerTimeZone;
+	
+	private OutputConfiguration outputConfiguration;
+	
+	private ObjectNode output;
+	
 	private KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
-	public MetricsTransformer(KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML) {
+	public MetricsTransformer(OutputConfiguration outputConfiguration, 
+			KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML) {
+		this.outputConfiguration = outputConfiguration;
 		this.kafkaStreamsConfigurationYML = kafkaStreamsConfigurationYML;
 	}
 
@@ -64,6 +78,10 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 	@Override
 	public void init(ProcessorContext context) {
 		this.context = context;
+		
+		output = (ObjectNode) outputConfiguration.getDailyOutputJsonObj();
+		headerTimeZone = ZoneId.of(TimeZone.getTimeZone(outputConfiguration.getHeaderFormatTimeZone()).toZoneId().toString());
+		
 		currentWindow = new Window(0, 0) {
 			@Override
 			public boolean overlap(Window other) {
@@ -148,10 +166,24 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		ObjectNode metrics = (ObjectNode) metricsStateStore.get(AppAOConstants.METRIC);
 		if (metrics == null)
 			metrics = (ObjectNode) outputInitialization();
-		this.context.forward(AppAOConstants.METRIC, metrics);	
+		
+		this.context.forward(AppAOConstants.METRIC, generateOutput(metrics));	
 
 		LOGGER.debug("MetricsTransformer:forwardMetric - the consolidated data {} for the minute being sending to processor", metrics);
 		metricsStateStore.put(AppAOConstants.METRIC, outputInitialization());	
+	}
+	
+	private ObjectNode generateOutput(JsonNode value) {
+		ZonedDateTime headerDate = ZonedDateTime.now(headerTimeZone);
+		output.put(AppAOConstants.TRANSACTIONDATETIME, headerDate.format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+		output.put(ApplicationMetricsConstants.TOTAL_APPLICATIONS, value.get(ApplicationMetricsConstants.TOTAL_APPLICATIONS).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_APPROVED, value.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_DECLINED, value.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_PENDED, value.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, value.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_SAVINGS, value.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt());
+		output.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, value.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt());
+		return output;
 	}
 
 	private JsonNode outputInitialization() {

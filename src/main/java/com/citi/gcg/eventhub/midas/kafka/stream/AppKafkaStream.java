@@ -42,8 +42,6 @@ import com.citi.gcg.eventhub.midas.config.yml.OutputConfiguration;
 import com.citi.gcg.eventhub.midas.constants.ApplicationMetricsConstants;
 import com.citi.gcg.eventhub.midas.kafka.stream.aggregator.ApplicationMetricsAggregator;
 import com.citi.gcg.eventhub.midas.kafka.stream.aggregator.MetricInitializer;
-import com.citi.gcg.eventhub.midas.kafka.stream.processor.KProducer;
-import com.citi.gcg.eventhub.midas.kafka.stream.processor.KafkaProcesor;
 import com.citi.gcg.eventhub.midas.kafka.stream.transformer.MetricsTransformer;
 import com.citi.gcg.eventhub.midas.service.AppService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -70,9 +68,6 @@ public class AppKafkaStream {
 	
 	@Autowired
 	private KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML;
-	
-	@Autowired
-	private KProducer kProducer;
 	
 	@Autowired
 	private OutputConfiguration outputConfiguration;
@@ -105,8 +100,10 @@ public class AppKafkaStream {
 				new ApplicationMetricsAggregator(eventPayloadConfigurationYML),
 				materialized(ApplicationMetricsConstants.AGGREGATOR_STATSTORE))
 		.toStream()
-		.transform(() -> new MetricsTransformer(kafkaStreamsConfigurationYML), ApplicationMetricsConstants.TRANSFORMER_STATSTORE)
-		.process(() -> new KafkaProcesor(outputConfiguration,kafkaStreamsConfigurationYML,kProducer));
+		.transform(() -> new MetricsTransformer(outputConfiguration,
+				kafkaStreamsConfigurationYML), 
+				ApplicationMetricsConstants.TRANSFORMER_STATSTORE)
+		.to(kafkaStreamsConfigurationYML.getOutputTopic());
 	}
 	
 	/***
