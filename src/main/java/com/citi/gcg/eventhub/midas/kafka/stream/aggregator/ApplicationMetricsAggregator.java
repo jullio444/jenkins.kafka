@@ -100,6 +100,7 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 	 */
 	private ObjectNode applicationMetrics(String applicationOperation, String currentApplicationStatus,
 			String previousApplicationStatus, ObjectNode objectNode) {
+		
 		if(applicationOperation.equals(ApplicationMetricsConstants.APPLICATION_OPERATION_NEW)) {
 			objectNode.put(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED, objectNode.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt() + 1);
 			objectNode.put(currentApplicationStatus, objectNode.get(currentApplicationStatus).asInt() + 1);
@@ -107,8 +108,8 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 		else if((currentApplicationStatus!=null ) && (previousApplicationStatus!=null) && (!currentApplicationStatus.equals(previousApplicationStatus))) {
 			objectNode.put(currentApplicationStatus, objectNode.get(currentApplicationStatus).asInt() + 1);
 			objectNode.put(previousApplicationStatus, objectNode.get(previousApplicationStatus).asInt(0) - 1);	
-			
 		}
+		
 		return objectNode;
 	}
 
