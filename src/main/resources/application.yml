@@ -41,8 +41,8 @@ spring:
         security.protocol: SASL_SSL
         sasl.mechanism: GSSAPI
         sasl.kerberos.service.name: kfkusr
-        sasl.jaas.config: "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab=\"I:/Narsimha/DEVCerts/eckappusr.sd-d9fe-3d51.keytab\"principal=\"eckappusr/sd-d9fe-3d51.nam.nsroot.net@NAM.NSROOT.NET\";"
-        ssl.truststore.location: I:/Narsimha/DEVCerts/DEV_cacerts.jks
+        sasl.jaas.config: "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab=\"./src/main/resources/eckappusr.sd-d9fe-3d51.keytab\"principal=\"eckappusr/sd-d9fe-3d51.nam.nsroot.net@NAM.NSROOT.NET\";"
+        ssl.truststore.location: ./src/main/resources/DEV_cacerts.jks
         ssl.truststore.password: changeit
 
   cloud:
@@ -67,9 +67,9 @@ spring:
               security.protocol: SASL_SSL
               sasl.mechanism: GSSAPI
               sasl.kerberos.service.name: kfkusr
-              ssl.truststore.location: I:/Narsimha/DEVCerts/DEV_cacerts.jks
+              ssl.truststore.location: ./src/main/resources/DEV_cacerts.jks
               ssl.truststore.password: changeit              
-              sasl.jaas.config: "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab=\"I:/Narsimha/DEVCerts/eckappusr.sd-d9fe-3d51.keytab\" principal=\"eckappusr/sd-d9fe-3d51.nam.nsroot.net@NAM.NSROOT.NET\";"
+              sasl.jaas.config: "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab=\"./src/main/resources/eckappusr.sd-d9fe-3d51.keytab\" principal=\"eckappusr/sd-d9fe-3d51.nam.nsroot.net@NAM.NSROOT.NET\";"
 
 # application configuration
 logging:
