@@ -38,6 +38,12 @@ public class ApplicationMetricsConstants {
 	public static final String AGGREGATOR_STATSTORE = "aggregator-statestore";
 	public static final String TRANSFORMER_STATSTORE = "transformer-statestore";
 	
+	public static final String DAY_AGGREGATOR_STATSTORE = "aggregator-statestore-day";
+	public static final String DAY_TRANSFORMER_STATSTORE = "transformer-statestore-day";
+	public static final String MONTH_AGGREGATOR_STATSTORE = "aggregator-statestore-month";
+	public static final String MONTH_TRANSFORMER_STATSTORE = "transformer-statestore-month";
+	public static final String YEAR_AGGREGATOR_STATSTORE = "aggregator-statestore-year";
+	public static final String YEAR_TRANSFORMER_STATSTORE = "transformer-statestore-year";
 	public static final long CONTEXT_SCHEDULE = 1;
 	
 	public static final String AGGREGATOR_APPROVED = "applications_approved";
@@ -51,6 +57,7 @@ public class ApplicationMetricsConstants {
 	public static final String TOTAL_PENDED = "applicationsPended";
 	public static final String TOTAL_DECLINED = "applicationsDeclined";
 
+	public static final String REFRESHTYPE= "refreshType";
 	public static final String AGGREGATOR_SAVINGS = "accounts_savings";
 	public static final String AGGREGATOR_CHECKINGS = "accounts_checkings";
 

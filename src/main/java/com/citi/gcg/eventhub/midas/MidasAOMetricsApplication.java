@@ -26,12 +26,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
-public class Application {
+public class MidasAOMetricsApplication {
 
 	/***
 	 * Application main method to start and process the events.
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(MidasAOMetricsApplication.class, args);
 	}
 }

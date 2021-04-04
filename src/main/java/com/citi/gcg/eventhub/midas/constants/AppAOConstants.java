@@ -32,6 +32,11 @@ public class AppAOConstants {
 	public static final String METRICS_SAVINGS_ACCOUNTS = "totalSavingsAccountsOpened";
 	public static final String METRICS_CHECKING_ACCOUNTS = "totalCheckingsAccountsOpened";
 	public static final String METRIC= "metrics";
+	public static final String DAY_METRICTYPE= "DAY";
+	public static final String MONTH_METRICTYPE= "MONTH";
+	public static final String YEAR_METRICTYPE= "YEAR";
+	public static final String LIFETIME_METRICTYPE= "LIFETIME";
+	
 
 	private AppAOConstants() {}
 	

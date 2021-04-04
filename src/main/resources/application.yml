@@ -2,13 +2,13 @@
 eventhub: 
   configuration:
     kstreams:  
-      windowSizeSeconds: 30
+      windowSizeSeconds: 60
       cleanUpPolicy: 3
       outputTopic: nam.us.all.derived.midas.ao.metrics
   payload:
     metrics:  
       conditions:
-        categorization: file://./src/test/resources/udf_conditions.json
+        categorization: file://./src/main/resources/udf_conditions.json
         appSubmittDatePath: event.body.applicationSubmittedDate
         sourceTimeStampFormat: yyyy-MM-dd HH:mm:ss z
         
@@ -17,12 +17,13 @@ config:
     outputFormat: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"MINUTE", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0, "totalAccountsOpened": 0,"totalSavingsAccountsOpened":0, "totalCheckingsAccountsOpened":0}'
     outputFormatDaily: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0}'
     headerFormatTimeZone: UTC
-    timeStampFormat: yyyy-MM-dd'T'HH:mm:ss'Z'    
+    timeStampFormat: yyyy-MM-dd'T'HH:mm:ss'Z'
+   
 spring:
   application: 
     name: EventHub-MIDAS_AO-Realtime-Metrics
   kafka:
-    bootstrap-servers: 127.0.0.1:51817
+    bootstrap-servers: gtcrd-ckbla01d.nam.nsroot.net:9094,gtcrd-ckbla02d.nam.nsroot.net:9094,ckbla03d.nam.nsroot.net:9094
     consumer:
       # Configures the Spring Kafka ErrorHandlingDeserializer that delegates to the 'real' deserializers
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
@@ -32,23 +33,29 @@ spring:
       spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
       spring.deserializer.value.delegate.class: com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde
     producer:
-      bootstrap-servers: 127.0.0.1:51817
+      bootstrap-servers: gtcrd-ckbla01d.nam.nsroot.net:9094,gtcrd-ckbla02d.nam.nsroot.net:9094,ckbla03d.nam.nsroot.net:9094
       client-id: EventHub-MIDAS_AO-Realtime-Metrics-Producer
-      retries: 3
-      properties: 
+      properties:
         key.serializer: org.apache.kafka.common.serialization.StringSerializer
         value.serializer: org.apache.kafka.common.serialization.StringSerializer
+        security.protocol: SASL_SSL
+        sasl.mechanism: GSSAPI
+        sasl.kerberos.service.name: kfkusr
+        sasl.jaas.config: "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab=\"I:/Narsimha/DEVCerts/eckappusr.sd-d9fe-3d51.keytab\"principal=\"eckappusr/sd-d9fe-3d51.nam.nsroot.net@NAM.NSROOT.NET\";"
+        ssl.truststore.location: I:/Narsimha/DEVCerts/DEV_cacerts.jks
+        ssl.truststore.password: changeit
+
   cloud:
     stream:
      bindings:
         data-input:
-          destination: nam.us.retailbank.digital.raw.ross-application
+          destination: nam.us.retailbank.digital.raw.ross-applicant
      kafka: 
         streams:
           binder:
-            brokers: 127.0.0.1:51817
+            brokers: gtcrd-ckbla01d.nam.nsroot.net:9094,gtcrd-ckbla02d.nam.nsroot.net:9094,ckbla03d.nam.nsroot.net:9094
             configuration: 
-              application.id: I_STR_MIDAS_A_MDB_03_EHTEST
+              application.id: I_STR_MIDAS_A_MDB_03_EHTEST135
               commit.interval.ms: 1000             
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde
@@ -57,6 +64,13 @@ spring:
               consumer.interceptor.class: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
               consumer.auto.offset.reset: latest
               state.dir: ./
+              security.protocol: SASL_SSL
+              sasl.mechanism: GSSAPI
+              sasl.kerberos.service.name: kfkusr
+              ssl.truststore.location: I:/Narsimha/DEVCerts/DEV_cacerts.jks
+              ssl.truststore.password: changeit              
+              sasl.jaas.config: "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab=\"I:/Narsimha/DEVCerts/eckappusr.sd-d9fe-3d51.keytab\" principal=\"eckappusr/sd-d9fe-3d51.nam.nsroot.net@NAM.NSROOT.NET\";"
+
 # application configuration
 logging:
   level:
