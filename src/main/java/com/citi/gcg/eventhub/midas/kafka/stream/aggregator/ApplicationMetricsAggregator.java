@@ -37,7 +37,6 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationMetricsAggregator.class);
 
 	private EventPayloadConfigurationYML eventPayloadConfigurationYML;
-
 	public ApplicationMetricsAggregator(EventPayloadConfigurationYML eventPayloadConfigurationYML) {
 		this.eventPayloadConfigurationYML = eventPayloadConfigurationYML;
 	}
@@ -49,7 +48,7 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 	 */
 	@Override
 	public JsonNode apply(String key, JsonNode value, JsonNode aggregate) {
-
+		
 		ObjectNode objectNode = (ObjectNode) aggregate;
 
 		ResultsExtractor resultsExtractor= new ResultsExtractor();
@@ -75,7 +74,7 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 			LOGGER.debug("ApplicationMetricsAggregator - apply: Type of account : {}", typeOfAccount);
 
 			applicationMetrics(applicationOperation,currentApplicationStatus,previousApplicationStatus,objectNode);
-
+			   
 			if(accountOpened!=null) {
 
 				objectNode.put(accountOpened, objectNode.get(accountOpened).asInt()+1);
@@ -83,9 +82,7 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 				objectNode.put(typeOfAccount, objectNode.get(typeOfAccount).asInt()+1);
 			}
 
-
 		}
-
 
 		return aggregate;
 	}
@@ -106,6 +103,7 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 			objectNode.put(currentApplicationStatus, objectNode.get(currentApplicationStatus).asInt() + 1);
 		}
 		else if((currentApplicationStatus!=null ) && (previousApplicationStatus!=null) && (!currentApplicationStatus.equals(previousApplicationStatus))) {
+			
 			objectNode.put(currentApplicationStatus, objectNode.get(currentApplicationStatus).asInt() + 1);
 			objectNode.put(previousApplicationStatus, objectNode.get(previousApplicationStatus).asInt(0) - 1);	
 		}

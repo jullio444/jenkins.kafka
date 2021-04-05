@@ -41,6 +41,10 @@ public class EventPayloadConfigurationYML {
 
 	private String categorization;
 
+	private String appSubmittDatePath;
+
+	private String sourceTimeStampFormat;
+
 	private JsonNode filters;
 
 	private JsonNode conditions;
@@ -112,6 +116,22 @@ public class EventPayloadConfigurationYML {
 
 	public void setConditions(JsonNode conditions) {
 		this.conditions = conditions;
+	}
+
+	public String getAppSubmittDatePath() {
+		return appSubmittDatePath;
+	}
+
+	public void setAppSubmittDatePath(String appSubmittDatePath) {
+		this.appSubmittDatePath = appSubmittDatePath;
+	}
+
+	public String getSourceTimeStampFormat() {
+		return sourceTimeStampFormat;
+	}
+
+	public void setSourceTimeStampFormat(String sourceTimeStampFormat) {
+		this.sourceTimeStampFormat = sourceTimeStampFormat;
 	}
 
 }

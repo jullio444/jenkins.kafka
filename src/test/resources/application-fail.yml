@@ -9,13 +9,15 @@ eventhub:
     metrics:  
       conditions:
         categorization: file://./src/test/resources/udf_conditions.json
-        dateValidateField: createdDate
+        appSubmittDatePath: event.body.applicationSubmittedDate
+        sourceTimeStampFormat: yyyy-MM-dd HH:mm:ss z
         
 config: 
   output:
     outputFormat: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening" "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"MINUTE", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0,"totalAccountsOpened": 0,"totalSavingsAccountsOpened":0, "totalCheckingAccountsOpened":0}'
+    outputFormatDaily: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"", "domain": "Service", "transactionDateTime": "2020-08-27T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0}'   
     headerFormatTimeZone: UTC
-    
+    timeStampFormat: yyyy-MM-dd'T'HH:mm:ss'Z'   
 spring:
   application: 
     name: EventHub-MIDAS_AO-Realtime-Metrics

@@ -42,9 +42,12 @@ public class OutputConfiguration {
 
 	private String outputFormat;
 	private JsonNode dailyOutputJsonObj;
+	private String outputFormatDaily;
+	private JsonNode dayOutputJsonObj;
 	private ObjectMapper mapper;
 	private String headerFormatTimeZone;
-
+	private String timeStampFormat;
+	
 	public OutputConfiguration(){
 		mapper = new ObjectMapper();
 	}
@@ -53,9 +56,12 @@ public class OutputConfiguration {
 	private void init() {
 		try {
 			dailyOutputJsonObj = mapper.readTree(outputFormat);
-			if(LOGGER.isInfoEnabled()) {
-				LOGGER.info(String.format("Daily OutputOutput format: %s", dailyOutputJsonObj.toString()));
-			}
+			dayOutputJsonObj = mapper.readTree(outputFormatDaily);
+
+			if(LOGGER.isInfoEnabled())
+				LOGGER.info(String.format("lifeTime OutputOutput format: %s", dailyOutputJsonObj.toString()));
+			if(LOGGER.isInfoEnabled())
+				LOGGER.info(String.format("OtherMetrics OutputOutput format: %s", dayOutputJsonObj.toString()));
 		} catch (IOException exception) {
 			LOGGER.error(String.format("Error Loading the JSON formats %s", exception.toString()));
 		}
@@ -81,4 +87,23 @@ public class OutputConfiguration {
 		return dailyOutputJsonObj;
 	}
 
+	public String getOutputFormatDaily() {
+		return outputFormatDaily;
+	}
+
+	public void setOutputFormatDaily(String outputFormatDaily) {
+		this.outputFormatDaily = outputFormatDaily;
+	}
+
+	public JsonNode getDayOutputJsonObj() {
+		return dayOutputJsonObj;
+	}
+
+	public String getTimeStampFormat() {
+		return timeStampFormat;
+	}
+
+	public void setTimeStampFormat(String timeStampFormat) {
+		this.timeStampFormat = timeStampFormat;
+	}
 }

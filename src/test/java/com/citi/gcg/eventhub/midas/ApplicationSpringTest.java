@@ -9,7 +9,7 @@ public class ApplicationSpringTest {
 
 	@Test
 	public void applicationContextTest() {
-		Application .main(new String[] {});
+		MidasAOMetricsApplication .main(new String[] {});
 		Assert.assertTrue(Boolean.TRUE);
 	}
 }

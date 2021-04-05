@@ -51,37 +51,45 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 
 	private ProcessorContext context;
 
+	private String typeOfMetric;
+
+	private String stateStoreName;
+
 	private KeyValueStore<String, JsonNode> metricsStateStore;
 
 	private Window currentWindow;
 
 	private JsonNode currentJsonAggregator;
 
-	private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	private ZoneId headerTimeZone;
-	
+
 	private OutputConfiguration outputConfiguration;
-	
+
 	private ObjectNode output;
-	
+
+	private ObjectNode outputOther;
+
 	private KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	public MetricsTransformer(OutputConfiguration outputConfiguration, 
-			KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML) {
+			KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML, String stateStoreName, String typeOfMetric) {
 		this.outputConfiguration = outputConfiguration;
 		this.kafkaStreamsConfigurationYML = kafkaStreamsConfigurationYML;
+		this.stateStoreName=stateStoreName;
+		this.typeOfMetric= typeOfMetric;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init(ProcessorContext context) {
 		this.context = context;
-		
+
 		output = (ObjectNode) outputConfiguration.getDailyOutputJsonObj();
+		outputOther = (ObjectNode) outputConfiguration.getDayOutputJsonObj();
 		headerTimeZone = ZoneId.of(TimeZone.getTimeZone(outputConfiguration.getHeaderFormatTimeZone()).toZoneId().toString());
-		
+
 		currentWindow = new Window(0, 0) {
 			@Override
 			public boolean overlap(Window other) {
@@ -89,7 +97,7 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 			}
 		};
 		currentJsonAggregator = outputInitialization();		
-		this.metricsStateStore = (KeyValueStore<String, JsonNode>) this.context.getStateStore(ApplicationMetricsConstants.TRANSFORMER_STATSTORE);
+		this.metricsStateStore = (KeyValueStore<String, JsonNode>) this.context.getStateStore(stateStoreName);
 		this.context.schedule(Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds()), 
 				PunctuationType.WALL_CLOCK_TIME, currentTime -> forwardMetric());
 
@@ -127,27 +135,27 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		result.put(ApplicationMetricsConstants.AGGREGATOR_SAVINGS, result.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt());
 		result.put(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS, result.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt());
 		result.put(ApplicationMetricsConstants.ACCOUNT_OPENED, result.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt() - old.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt());
-		
+
 		return result;
 	}
 
 	/***
-	 * It is a method to update the statestore with the metric valus received from aggregator
+	 * It is a method to update the statestore with the metric values received from aggregator
 	 * @param value
 	 */
 	private void updateStateStore(JsonNode value) {
 		ObjectNode previous = (ObjectNode) metricsStateStore.get(AppAOConstants.METRIC);
-		
+
 		if (previous == null)
 			previous = (ObjectNode) outputInitialization();
-        
-		int approved = value.get(ApplicationMetricsConstants.AGGREGATOR_APPROVED).asInt();
-		int declined = value.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt();
-		int pended = value.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt();
-		int submitted = value.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt();
-		int savingAccounts = value.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt();
-		int checkingAccounts =value.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt();
-		int totalAccounts = value.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt();
+
+		int approved= value.get(ApplicationMetricsConstants.AGGREGATOR_APPROVED).asInt();
+		int declined= value.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt();
+		int pended= value.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt();
+		int submitted= value.get(ApplicationMetricsConstants.AGGREGATOR_SUBMITTED).asInt();
+		int savingAccounts= value.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt();
+		int checkingAccounts=value.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt();
+		int totalAccounts= value.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt();
 
 		previous.put(ApplicationMetricsConstants.TOTAL_APPLICATIONS, previous.get(ApplicationMetricsConstants.TOTAL_APPLICATIONS).asInt() + submitted);
 		previous.put(ApplicationMetricsConstants.TOTAL_APPROVED, previous.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt() + approved);
@@ -156,35 +164,58 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		previous.put(ApplicationMetricsConstants.TOTAL_SAVINGS, previous.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt() + savingAccounts);
 		previous.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, previous.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt() + checkingAccounts);
 		previous.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, previous.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt() + totalAccounts);
+
 		metricsStateStore.put(AppAOConstants.METRIC, previous);
 	}
 
-    /***
-     * It is a Method which takes the latest metrics from state store and forwarding it to processor.
-     */
+	/***
+	 * It is a Method which takes the latest metrics from state store and forwarding it to processor.
+	 */
 	private void forwardMetric() {
+
 		ObjectNode metrics = (ObjectNode) metricsStateStore.get(AppAOConstants.METRIC);
+
 		if (metrics == null)
 			metrics = (ObjectNode) outputInitialization();
-		
-		this.context.forward(AppAOConstants.METRIC, generateOutput(metrics));	
 
+		this.context.forward(AppAOConstants.METRIC, generateOutput(metrics, typeOfMetric));			
 		LOGGER.debug("MetricsTransformer:forwardMetric - the consolidated data {} for the minute being sending to processor", metrics);
-		metricsStateStore.put(AppAOConstants.METRIC, outputInitialization());	
+		metricsStateStore.put(AppAOConstants.METRIC, outputInitialization());
 	}
-	
-	private ObjectNode generateOutput(JsonNode value) {
+
+
+	private ObjectNode generateOutput(JsonNode value, String typeOfMetric) {
+		ObjectNode finalNode =null;
 		ZonedDateTime headerDate = ZonedDateTime.now(headerTimeZone);
-		output.put(AppAOConstants.TRANSACTIONDATETIME, headerDate.format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
-		output.put(ApplicationMetricsConstants.TOTAL_APPLICATIONS, value.get(ApplicationMetricsConstants.TOTAL_APPLICATIONS).asInt());
-		output.put(ApplicationMetricsConstants.TOTAL_APPROVED, value.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt());
-		output.put(ApplicationMetricsConstants.TOTAL_DECLINED, value.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt());
-		output.put(ApplicationMetricsConstants.TOTAL_PENDED, value.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt());
-		output.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, value.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt());
-		output.put(ApplicationMetricsConstants.TOTAL_SAVINGS, value.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt());
-		output.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, value.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt());
-		return output;
+		if(typeOfMetric.equalsIgnoreCase(AppAOConstants.LIFETIME_METRICTYPE)) {
+			output.put(AppAOConstants.TRANSACTIONDATETIME, headerDate.format(DateTimeFormatter.ofPattern(outputConfiguration.getTimeStampFormat())));
+			output.put(ApplicationMetricsConstants.TOTAL_APPLICATIONS, value.get(ApplicationMetricsConstants.TOTAL_APPLICATIONS).asInt());
+			output.put(ApplicationMetricsConstants.TOTAL_APPROVED, value.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt());
+			output.put(ApplicationMetricsConstants.TOTAL_DECLINED, value.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt());
+			output.put(ApplicationMetricsConstants.TOTAL_PENDED, value.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt());
+			output.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, value.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt());
+			output.put(ApplicationMetricsConstants.TOTAL_SAVINGS, value.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt());
+			output.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, value.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt());
+
+			LOGGER.info("lifetime metrics {}", output);
+
+			finalNode=output;
+		}else {
+			outputOther.put(ApplicationMetricsConstants.REFRESHTYPE,typeOfMetric);
+			outputOther.put(AppAOConstants.TRANSACTIONDATETIME, headerDate.format(DateTimeFormatter.ofPattern(outputConfiguration.getTimeStampFormat())));
+			outputOther.put(ApplicationMetricsConstants.TOTAL_APPLICATIONS, value.get(ApplicationMetricsConstants.TOTAL_APPLICATIONS).asInt());
+			outputOther.put(ApplicationMetricsConstants.TOTAL_APPROVED, value.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt());
+			outputOther.put(ApplicationMetricsConstants.TOTAL_DECLINED, value.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt());
+			outputOther.put(ApplicationMetricsConstants.TOTAL_PENDED, value.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt());
+
+			LOGGER.info("{} metrics: {}",typeOfMetric,outputOther);
+			finalNode=outputOther;
+		}
+
+		return finalNode;
 	}
+
+
 
 	private JsonNode outputInitialization() {
 		ObjectNode node = objectMapper.createObjectNode();
