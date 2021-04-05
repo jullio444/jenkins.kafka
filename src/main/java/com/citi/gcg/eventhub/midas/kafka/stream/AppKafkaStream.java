@@ -15,6 +15,8 @@
 package com.citi.gcg.eventhub.midas.kafka.stream;
 
 import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
@@ -43,11 +45,13 @@ import com.citi.gcg.eventhub.midas.config.yml.KafkaStreamsConfigurationYML;
 import com.citi.gcg.eventhub.midas.config.yml.OutputConfiguration;
 import com.citi.gcg.eventhub.midas.constants.AppAOConstants;
 import com.citi.gcg.eventhub.midas.constants.ApplicationMetricsConstants;
+import com.citi.gcg.eventhub.midas.constants.ResultsExtractorConstants;
 import com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde;
 import com.citi.gcg.eventhub.midas.kafka.stream.aggregator.ApplicationMetricsAggregator;
 import com.citi.gcg.eventhub.midas.kafka.stream.aggregator.MetricInitializer;
 import com.citi.gcg.eventhub.midas.kafka.stream.transformer.MetricsTransformer;
 import com.citi.gcg.eventhub.midas.service.AppService;
+import com.citi.gcg.eventhub.midas.service.JsonTool;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /***
@@ -139,6 +143,7 @@ public class AppKafkaStream {
 		stream
 		.filter((k,v)-> v!=null)
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))
+		.filter((key, value) -> validateSubmittedDate(value))
 		.selectKey((k,v) -> k = filtertNullKey())
 		.groupByKey()
 		.windowedBy(TimeWindows.of(Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds())))
@@ -222,6 +227,25 @@ public class AppKafkaStream {
 	private String filtertNullKey() {
 		LOGGER.trace("AppKafkaStream:filtertNullKey - Handling the null key scenario");
 		return "EH-Aggregation";
+	}
+
+	private boolean validateSubmittedDate(JsonNode message) {
+		boolean flag=false;
+
+		String submittedDate= JsonTool.fetchString(message, eventPayloadConfigurationYML.getAppSubmittDatePath());
+
+		if(submittedDate!=null&&submittedDate!=ResultsExtractorConstants.STRING_EMPTY) {
+			try {
+				ZonedDateTime recordDate = ZonedDateTime.parse(submittedDate, DateTimeFormatter.ofPattern(eventPayloadConfigurationYML.getSourceTimeStampFormat()));
+				flag=true;
+			}catch(Exception e) {
+				LOGGER.warn("LifeTime Metrics Evaluation: An issue with parsing the applicationSubmittedDate due to invalid format with the following error {}", e.getLocalizedMessage());
+				return false;
+			}
+		}else {
+			LOGGER.warn("LifeTime Metrics Evaluation: The required element {} is not available in the payload",submittedDate);
+		}
+		return flag;
 	}
 
 	protected WindowBytesStoreSupplier getSupplier(String stateStoreName) {
