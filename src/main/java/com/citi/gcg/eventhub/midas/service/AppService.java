@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.citi.gcg.eventhub.midas.config.yml.EventPayloadConfigurationYML;
 import com.citi.gcg.eventhub.midas.constants.AppAOConstants;
+import com.citi.gcg.eventhub.midas.constants.ResultsExtractorConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
@@ -50,10 +51,8 @@ public class AppService {
 		boolean flag= false;
 		String applicationSubmittedDate= JsonTool.fetchString(data, eventPayloadConfigurationYML.getAppSubmittDatePath());
 		LOGGER.info("the submitted time is {} ",applicationSubmittedDate);
-		String status= JsonTool.fetchString(data, "event.body.status");
-		String pevStatus= JsonTool.fetchString(data, "event.body.previousStatus");
 		
-		if(applicationSubmittedDate!=null&&applicationSubmittedDate!="") {
+		if(applicationSubmittedDate!=null&&applicationSubmittedDate!=ResultsExtractorConstants.STRING_EMPTY) {
 			ZonedDateTime recordDate = ZonedDateTime.parse(applicationSubmittedDate, DateTimeFormatter.ofPattern(eventPayloadConfigurationYML.getSourceTimeStampFormat()));
 
 			boolean sameDay = ZonedDateTime.now(recordDate.getZone()).getDayOfYear() == recordDate.getDayOfYear();

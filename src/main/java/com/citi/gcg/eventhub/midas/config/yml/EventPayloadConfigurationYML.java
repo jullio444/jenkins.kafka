@@ -40,11 +40,11 @@ public class EventPayloadConfigurationYML {
 	private static final  Logger LOGGER = LoggerFactory.getLogger(EventPayloadConfigurationYML.class);
 
 	private String categorization;
-	
+
 	private String appSubmittDatePath;
-	
+
 	private String sourceTimeStampFormat;
-	
+
 	private JsonNode filters;
 
 	private JsonNode conditions;

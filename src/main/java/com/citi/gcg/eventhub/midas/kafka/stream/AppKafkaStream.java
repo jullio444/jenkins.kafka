@@ -76,9 +76,9 @@ public class AppKafkaStream {
 
 	@Autowired
 	private OutputConfiguration outputConfiguration;
-	
+
 	@Autowired
-    private ApplicationContext applicationContext;
+	private ApplicationContext applicationContext;
 
 	public AppKafkaStream(AppService appService, EventPayloadConfigurationYML eventPayloadConfigurationYML,
 			KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML,
@@ -97,45 +97,45 @@ public class AppKafkaStream {
 	 * @param stream
 	 */
 
-	
-	
+
+
 	//@KafkaStreamsStateStore(name = ApplicationMetricsConstants.TRANSFORMER_STATSTORE, type = StoreType.KEYVALUE, keySerde = ApplicationMetricsConstants.KEY_SERDE, valueSerde = ApplicationMetricsConstants.VALUE_SERDE)
 	@StreamListener(ApplicationMetricsConstants.INPUT_TOPIC)
 	public void proccess(KStream<String, JsonNode> stream) {
 
 		StoreBuilder<KeyValueStore<String, JsonNode>> storeBuilder1 = Stores.keyValueStoreBuilder(
-			    Stores.persistentKeyValueStore(ApplicationMetricsConstants.DAY_TRANSFORMER_STATSTORE),
-			    Serdes.String(),
-			    new JsonSerde()
-			    );
+				Stores.persistentKeyValueStore(ApplicationMetricsConstants.DAY_TRANSFORMER_STATSTORE),
+				Serdes.String(),
+				new JsonSerde()
+				);
 		StoreBuilder<KeyValueStore<String, JsonNode>> storeBuilder2 = Stores.keyValueStoreBuilder(
-			    Stores.persistentKeyValueStore(ApplicationMetricsConstants.MONTH_TRANSFORMER_STATSTORE),
-			    Serdes.String(),
-			    new JsonSerde());
+				Stores.persistentKeyValueStore(ApplicationMetricsConstants.MONTH_TRANSFORMER_STATSTORE),
+				Serdes.String(),
+				new JsonSerde());
 		StoreBuilder<KeyValueStore<String, JsonNode>> storeBuilder3 = Stores.keyValueStoreBuilder(
-			    Stores.persistentKeyValueStore(ApplicationMetricsConstants.YEAR_TRANSFORMER_STATSTORE),
-			    Serdes.String(),
-			    new JsonSerde());
+				Stores.persistentKeyValueStore(ApplicationMetricsConstants.YEAR_TRANSFORMER_STATSTORE),
+				Serdes.String(),
+				new JsonSerde());
 
 		StoreBuilder<KeyValueStore<String, JsonNode>> storeBuilder4 = Stores.keyValueStoreBuilder(
-			    Stores.persistentKeyValueStore(ApplicationMetricsConstants.TRANSFORMER_STATSTORE),
-			    Serdes.String(),
-			    new JsonSerde()
-			    );
-		
-		 try {
-				applicationContext.getBean(StreamsBuilderFactoryBean.class).getObject().addStateStore(storeBuilder1);
-			    applicationContext.getBean(StreamsBuilderFactoryBean.class).getObject().addStateStore(storeBuilder2);
-			    applicationContext.getBean(StreamsBuilderFactoryBean.class).getObject().addStateStore(storeBuilder3);
-			    applicationContext.getBean(StreamsBuilderFactoryBean.class).getObject().addStateStore(storeBuilder4);
-				
-			} catch (Exception e) {
-				LOGGER.error("Can not find 'stream-builder-process' bean.");
-			}
-		 
-		
-		 /***LifeTime*****/
-		 
+				Stores.persistentKeyValueStore(ApplicationMetricsConstants.TRANSFORMER_STATSTORE),
+				Serdes.String(),
+				new JsonSerde()
+				);
+
+		try {
+			applicationContext.getBean(StreamsBuilderFactoryBean.class).getObject().addStateStore(storeBuilder1);
+			applicationContext.getBean(StreamsBuilderFactoryBean.class).getObject().addStateStore(storeBuilder2);
+			applicationContext.getBean(StreamsBuilderFactoryBean.class).getObject().addStateStore(storeBuilder3);
+			applicationContext.getBean(StreamsBuilderFactoryBean.class).getObject().addStateStore(storeBuilder4);
+
+		} catch (Exception e) {
+			LOGGER.error("Can not find 'stream-builder-process' bean.");
+		}
+
+
+		/***LifeTime*****/
+
 		stream
 		.filter((k,v)-> v!=null)
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))
@@ -154,7 +154,7 @@ public class AppKafkaStream {
 
 
 		/*****Day****/
-		
+
 		stream
 		.filter((k,v)-> v!=null)
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))
@@ -174,7 +174,7 @@ public class AppKafkaStream {
 
 
 		/****Month****/
-		
+
 		stream
 		.filter((k,v)-> v!=null)
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))
@@ -192,9 +192,9 @@ public class AppKafkaStream {
 
 		.to(kafkaStreamsConfigurationYML.getOutputTopic());
 
-		
+
 		/*****Year*****/
-		
+
 		stream
 		.filter((k,v)-> v!=null)
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))

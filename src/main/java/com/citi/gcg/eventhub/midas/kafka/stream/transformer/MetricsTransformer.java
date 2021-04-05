@@ -50,25 +50,25 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 	private static final  Logger LOGGER = LoggerFactory.getLogger(MetricsTransformer.class);
 
 	private ProcessorContext context;
-	
+
 	private String typeOfMetric;
-	
+
 	private String stateStoreName;
 
 	private KeyValueStore<String, JsonNode> metricsStateStore;
-	
+
 	private Window currentWindow;
 
 	private JsonNode currentJsonAggregator;
-	
+
 	private ZoneId headerTimeZone;
-	
+
 	private OutputConfiguration outputConfiguration;
-	
+
 	private ObjectNode output;
-	
+
 	private ObjectNode outputOther;
-	
+
 	private KafkaStreamsConfigurationYML kafkaStreamsConfigurationYML;
 
 	private ObjectMapper objectMapper = new ObjectMapper();
@@ -85,11 +85,11 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 	@Override
 	public void init(ProcessorContext context) {
 		this.context = context;
-		
+
 		output = (ObjectNode) outputConfiguration.getDailyOutputJsonObj();
 		outputOther = (ObjectNode) outputConfiguration.getDayOutputJsonObj();
 		headerTimeZone = ZoneId.of(TimeZone.getTimeZone(outputConfiguration.getHeaderFormatTimeZone()).toZoneId().toString());
-		
+
 		currentWindow = new Window(0, 0) {
 			@Override
 			public boolean overlap(Window other) {
@@ -135,7 +135,7 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		result.put(ApplicationMetricsConstants.AGGREGATOR_SAVINGS, result.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt());
 		result.put(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS, result.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt() - old.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt());
 		result.put(ApplicationMetricsConstants.ACCOUNT_OPENED, result.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt() - old.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt());
-		
+
 		return result;
 	}
 
@@ -145,10 +145,10 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 	 */
 	private void updateStateStore(JsonNode value) {
 		ObjectNode previous = (ObjectNode) metricsStateStore.get(AppAOConstants.METRIC);
-		
+
 		if (previous == null)
 			previous = (ObjectNode) outputInitialization();
-        
+
 		int approved= value.get(ApplicationMetricsConstants.AGGREGATOR_APPROVED).asInt();
 		int declined= value.get(ApplicationMetricsConstants.AGGREGATOR_DECLINED).asInt();
 		int pended= value.get(ApplicationMetricsConstants.AGGREGATOR_PENDED).asInt();
@@ -156,7 +156,7 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		int savingAccounts= value.get(ApplicationMetricsConstants.AGGREGATOR_SAVINGS).asInt();
 		int checkingAccounts=value.get(ApplicationMetricsConstants.AGGREGATOR_CHECKINGS).asInt();
 		int totalAccounts= value.get(ApplicationMetricsConstants.ACCOUNT_OPENED).asInt();
-		
+
 		previous.put(ApplicationMetricsConstants.TOTAL_APPLICATIONS, previous.get(ApplicationMetricsConstants.TOTAL_APPLICATIONS).asInt() + submitted);
 		previous.put(ApplicationMetricsConstants.TOTAL_APPROVED, previous.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt() + approved);
 		previous.put(ApplicationMetricsConstants.TOTAL_PENDED, previous.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt() + pended);
@@ -164,25 +164,25 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 		previous.put(ApplicationMetricsConstants.TOTAL_SAVINGS, previous.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt() + savingAccounts);
 		previous.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, previous.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt() + checkingAccounts);
 		previous.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, previous.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt() + totalAccounts);
-		
+
 		metricsStateStore.put(AppAOConstants.METRIC, previous);
 	}
 
-    /***
-     * It is a Method which takes the latest metrics from state store and forwarding it to processor.
-     */
+	/***
+	 * It is a Method which takes the latest metrics from state store and forwarding it to processor.
+	 */
 	private void forwardMetric() {
-		
+
 		ObjectNode metrics = (ObjectNode) metricsStateStore.get(AppAOConstants.METRIC);
-		
+
 		if (metrics == null)
 			metrics = (ObjectNode) outputInitialization();
-		
+
 		this.context.forward(AppAOConstants.METRIC, generateOutput(metrics, typeOfMetric));			
 		LOGGER.debug("MetricsTransformer:forwardMetric - the consolidated data {} for the minute being sending to processor", metrics);
 		metricsStateStore.put(AppAOConstants.METRIC, outputInitialization());
 	}
-	
+
 
 	private ObjectNode generateOutput(JsonNode value, String typeOfMetric) {
 		ObjectNode finalNode =null;
@@ -196,9 +196,9 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 			output.put(ApplicationMetricsConstants.TOTAL_ACCOUNTS, value.get(ApplicationMetricsConstants.TOTAL_ACCOUNTS).asInt());
 			output.put(ApplicationMetricsConstants.TOTAL_SAVINGS, value.get(ApplicationMetricsConstants.TOTAL_SAVINGS).asInt());
 			output.put(ApplicationMetricsConstants.TOTAL_CHECKINGS, value.get(ApplicationMetricsConstants.TOTAL_CHECKINGS).asInt());
-			
+
 			LOGGER.info("lifetime metrics {}", output);
-			
+
 			finalNode=output;
 		}else {
 			outputOther.put(ApplicationMetricsConstants.REFRESHTYPE,typeOfMetric);
@@ -207,15 +207,15 @@ public class MetricsTransformer implements Transformer<Windowed<String>, JsonNod
 			outputOther.put(ApplicationMetricsConstants.TOTAL_APPROVED, value.get(ApplicationMetricsConstants.TOTAL_APPROVED).asInt());
 			outputOther.put(ApplicationMetricsConstants.TOTAL_DECLINED, value.get(ApplicationMetricsConstants.TOTAL_DECLINED).asInt());
 			outputOther.put(ApplicationMetricsConstants.TOTAL_PENDED, value.get(ApplicationMetricsConstants.TOTAL_PENDED).asInt());
-			
+
 			LOGGER.info("{} metrics: {}",typeOfMetric,outputOther);
 			finalNode=outputOther;
 		}
-		
+
 		return finalNode;
 	}
-	
-	
+
+
 
 	private JsonNode outputInitialization() {
 		ObjectNode node = objectMapper.createObjectNode();

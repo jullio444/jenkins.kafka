@@ -82,9 +82,7 @@ public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode
 				objectNode.put(typeOfAccount, objectNode.get(typeOfAccount).asInt()+1);
 			}
 
-
 		}
-
 
 		return aggregate;
 	}

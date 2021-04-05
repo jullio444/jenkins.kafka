@@ -84,7 +84,7 @@ public class ApplicationTest {
 
 	private static final String MODIFY_APPLICATION_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"%s\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"applicationSubmittedDate\":\"%s\",\"previousStatus\": \"%s\",\"status\": \"%s\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
 
-//	private static final String MODIFY_APPLICATIONSUBMITTED_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"%s\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"previousStatus\": \"%s\",\"status\": \"%s\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
+	//	private static final String MODIFY_APPLICATIONSUBMITTED_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"%s\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"previousStatus\": \"%s\",\"status\": \"%s\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
 
 
 	private static final String ACCOUNT_OPEN_SAMPLE1="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"previousStatus\": \"\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"071\",\"class\": \"009\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
@@ -154,9 +154,9 @@ public class ApplicationTest {
 	private static String setJsonValuesForInput(String tenatId ,String applicationSubmittedDate, String previousStatus, String status) {
 		return String.format(MODIFY_APPLICATION_INPUT ,tenatId,applicationSubmittedDate,previousStatus,status);
 	}
-//	private static String setJsonValuesForInputSubmitted(String tenatId , String previousStatus, String status) {
-//		return String.format(MODIFY_APPLICATIONSUBMITTED_INPUT ,tenatId,previousStatus,status);
-//	}
+	//	private static String setJsonValuesForInputSubmitted(String tenatId , String previousStatus, String status) {
+	//		return String.format(MODIFY_APPLICATIONSUBMITTED_INPUT ,tenatId,previousStatus,status);
+	//	}
 	private static List<JsonNode> fetchRecordsFromConsumer(ConsumerRecords<String, String> records) throws JsonMappingException, JsonProcessingException{
 		List<JsonNode> outputNodes= new ArrayList<>();;
 		Iterator<ConsumerRecord<String, String>> recordIterator = records.iterator();
@@ -172,7 +172,7 @@ public class ApplicationTest {
 		assertTrue(producer.send(new ProducerRecord<>(INPUT_TOPIC, node1)).get().hasOffset());
 		TimeUnit.MILLISECONDS.sleep(30000);
 	}
-	
+
 	@Test
 	public void testingJsonWithKey() throws InterruptedException, ExecutionException, JsonMappingException, JsonProcessingException {
 		JsonNode node1= mapper.readTree(SAMPLE_INPUT);
@@ -301,13 +301,10 @@ public class ApplicationTest {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.DATE, -1);
-//		date.setDate(date.getDate()-1);	
 		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 		cal.add(Calendar.MONTH, -1);
-//		date.setMonth(date.getMonth()-1);
 		JsonNode node2= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 		cal.add(Calendar.YEAR, -1);		
-//		date.setYear(date.getYear()-1);
 		JsonNode node3= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 
 		logger.info("Testing with application approved events with different applicationSubmittedDates");
@@ -347,7 +344,7 @@ public class ApplicationTest {
 		assertEquals(4, receivedOutputs.size());
 		consumer.close();
 	}
-	
+
 	@Test
 	public void testingAccountMetrics() throws InterruptedException, ExecutionException, JsonMappingException, JsonProcessingException {
 
@@ -430,60 +427,56 @@ public class ApplicationTest {
 		assertEquals("null", resultsExtractor.extractResultsFromData(node3, eventPayloadConfigurationYML.getConditions()).get("accountType"));
 
 	}
-	
+
 	@Test
 	public void testFilterDate() throws JsonMappingException, JsonProcessingException {
-		
+
 		SimpleDateFormat dateFormatter = new SimpleDateFormat(eventPayloadConfigurationYML.getSourceTimeStampFormat());
 		dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		JsonNode node= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
-		cal.add(Calendar.DATE, -1);
-//		date.setDate(date.getDate()-1);	 
+		cal.add(Calendar.DATE, -1); 
 		JsonNode node1= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 		cal.add(Calendar.MONTH, -1);
-//		date.setMonth(date.getMonth()-1);
 		JsonNode node2= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 		cal.add(Calendar.YEAR, -1);
-//		date.setYear(date.getYear()-1);
 		JsonNode node3= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
-		
-		
+
+
 		assertTrue(appService.filterSubmittedDate("DAY", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertTrue(appService.filterSubmittedDate("MONTH", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertTrue(appService.filterSubmittedDate("YEAR", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertFalse(appService.filterSubmittedDate("UNKNOWNTYPE", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		
-		
+
+
 		assertFalse(appService.filterSubmittedDate("DAY", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertTrue(appService.filterSubmittedDate("MONTH", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertTrue(appService.filterSubmittedDate("YEAR", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		
+
 		assertFalse(appService.filterSubmittedDate("DAY", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertFalse(appService.filterSubmittedDate("MONTH", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertTrue(appService.filterSubmittedDate("YEAR", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		
+
 		assertFalse(appService.filterSubmittedDate("DAY", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertFalse(appService.filterSubmittedDate("MONTH", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
 		assertFalse(appService.filterSubmittedDate("YEAR", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-//		consumer.close();
 	}
-	
+
 	@Test
 	public void testJsonTool() throws JsonMappingException, JsonProcessingException {
-		
+
 		final String SAMPLE_INPUT2="{\"event\": {\"header\": {\"name\": \"IIT Add External Accounts\", \"version\": \"1.0\",\"producerCSI\": \"172624\",\"channel\": \"CBOL |  MOB\",\"countryCode\": \"US\",\"businessCode\": \"Retail Services\",\"domain\": \"Pay\",\"uuid\": \"baa83138-b621-4768-90d9-2d87b91bed1d\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2020-08-27T02:34:12.00Z\",\"eventTimeStamp\": \"2020-08-27T02:34:12.00Z\"},\"body\": {\"customerIdentifiers\": [{\"customerIdentifier\": \"xxxxxxxx150\",\"customerIdType\": \"CCSID\"},{\"customerIdentifier\": \"xxxxxxxxxX173\",\"customerIdType\": \"CIN\"},{\"customerIdentifier\": \"xxxxxxxxxxx178\",\"customerIdType\": \"BASE_CIN\"}],\"accountIdentifiers\": [],\"eventDetails\": {\"confirmationNumber\": \"084378238147108\",\"accountNumber\": \"xxxxxxxx825\",\"routingNumber\": \"121000248\",\"accountType\": \"Checking\",\"financialInstitutionName\": \"WELLS FARGO BANK, NA\",\"accountNickName\": \"Chase Checking\",\"depositAmount1\": \"0.37\",\"depositAmount2\": \"0.27\",\"responseStatus\": \"Success\",\"transactionTimestamp\": \"2020-08-27T02:34:12.00Z\",\"channelId\": \"CBOl\",\"eventName\": \"IIT_TRIAL_VALIDATE\"}}}}";
-		
+
 		final String SAMPLE_INPUT3="{\"event\": {\"header\": {\"name\": \"IIT Add External Accounts\", \"version\": \"1.0\",\"producerCSI\": \"172624\",\"channel\": \"CBOL |  MOB\",\"countryCode\": \"US\",\"businessCode\": \"Retail Services\",\"domain\": \"Pay\",\"uuid\": \"baa83138-b621-4768-90d9-2d87b91bed1d\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2020-08-27T02:34:12.00Z\",\"eventTimeStamp\": \"2020-08-27T02:34:12.00Z\"},\"body\": {\"customerIdentifiers\": [{\"customerIdentifier\": \"xxxxxxxx150\",\"customerIdType\": \"CCSID\"},{\"customerIdentifier\": \"xxxxxxxxxX173\",\"customerIdType\": \"CIN\"},{\"customerIdentifier\": \"xxxxxxxxxxx178\",\"customerIdType\": \"BASE_CIN\"}],\"accountIdentifiers\": [{\"accountIdentifier\": \"xxxxxxxxxx111\",\"accountIdType\": \"accountNumber\"},{\"accountIdentifier\": \"Primary\",\"accountIdType\": \"accountHolderRole\"}],\"eventDetails\": {\"confirmationNumber\": \"084378238147108\",\"accountNumber\": \"xxxxxxxx825\",\"routingNumber\": \"121000248\",\"accountType\": \"Checking\",\"financialInstitutionName\": \"WELLS FARGO BANK, NA\",\"accountNickName\": \"Chase Checking\",\"depositAmount1\": \"0.37\",\"depositAmount2\": \"0.27\",\"responseStatus\": null,\"transactionTimestamp\": \"2020-08-27T02:34:12.00Z\",\"channelId\": \"CBOl\",\"eventName\": \"IIT_TRIAL_VALIDATE\"}}}}";
-		
+
 		JsonNode node1 = mapper.readTree(SAMPLE_INPUT);
-		
+
 		JsonNode node2 = mapper.readTree(SAMPLE_INPUT2);
-		
+
 		JsonNode node3 = mapper.readTree(SAMPLE_INPUT3);
-		
+
 		assertEquals("", JsonTool.fetchString(null, "event.body.eventDetails.responseStatus"));
 		assertEquals("", JsonTool.fetchString(node1, "event.body.eventDetails.citiCustomerIdentifierUnknown"));
 		assertEquals("TX", JsonTool.fetchString(node1, "event.body.details.address.state"));
