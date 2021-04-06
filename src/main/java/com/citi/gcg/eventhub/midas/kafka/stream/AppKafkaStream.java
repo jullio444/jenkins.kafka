@@ -45,7 +45,6 @@ import com.citi.gcg.eventhub.midas.config.yml.KafkaStreamsConfigurationYML;
 import com.citi.gcg.eventhub.midas.config.yml.OutputConfiguration;
 import com.citi.gcg.eventhub.midas.constants.AppAOConstants;
 import com.citi.gcg.eventhub.midas.constants.ApplicationMetricsConstants;
-import com.citi.gcg.eventhub.midas.constants.ResultsExtractorConstants;
 import com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde;
 import com.citi.gcg.eventhub.midas.kafka.stream.aggregator.ApplicationMetricsAggregator;
 import com.citi.gcg.eventhub.midas.kafka.stream.aggregator.MetricInitializer;

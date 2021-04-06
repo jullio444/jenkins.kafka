@@ -21,7 +21,7 @@ build:
     postBuildDeployEnv: DEV
 staticCodeAnalysis:
     blackDuck:
-        notifySOEID: rp08968
+        notifySOEID: sb18044
         archerRecord:
     sonarQube:
         sonarExcludes: Defaults

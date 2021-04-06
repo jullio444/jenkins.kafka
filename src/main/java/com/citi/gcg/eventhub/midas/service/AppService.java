@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import com.citi.gcg.eventhub.midas.config.yml.EventPayloadConfigurationYML;
 import com.citi.gcg.eventhub.midas.constants.AppAOConstants;
-import com.citi.gcg.eventhub.midas.constants.ResultsExtractorConstants;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
@@ -52,7 +51,7 @@ public class AppService {
 		String applicationSubmittedDate= JsonTool.fetchString(data, eventPayloadConfigurationYML.getAppSubmittDatePath());
 		LOGGER.info("{} Metrics evaluation: the submitted time is {} ",filterType,applicationSubmittedDate);
 
-		if(applicationSubmittedDate!=null && !applicationSubmittedDate.isEmpty()) {
+		if(!applicationSubmittedDate.isEmpty()) {
 			
 			try{
 
@@ -61,9 +60,12 @@ public class AppService {
 				boolean sameMonth = ZonedDateTime.now(recordDate.getZone()).getMonthValue() == recordDate.getMonthValue();
 				boolean sameYear = ZonedDateTime.now(recordDate.getZone()).getYear() == recordDate.getYear();
 
+				boolean dayMetricsCondition=sameDay&&sameMonth&&sameYear;
+				boolean monthMetricsCondition=sameMonth&&sameYear;
+
 				switch(filterType) {
 
-				case AppAOConstants.DAY_METRICTYPE: if(sameDay&&sameMonth&&sameYear) {
+				case AppAOConstants.DAY_METRICTYPE: if(dayMetricsCondition) {
 															flag=true;
 															LOGGER.info("{} Metrics evaluation: day condition satisfied", filterType);
 														}else {
@@ -71,7 +73,7 @@ public class AppService {
 														}
 														break;
 
-				case AppAOConstants.MONTH_METRICTYPE: if(sameMonth&&sameYear) {
+				case AppAOConstants.MONTH_METRICTYPE: if(monthMetricsCondition) {
 															flag=true;
 															LOGGER.info("{} Metrics evaluation: month condition satisfied", filterType);
 														}else {
