@@ -234,7 +234,7 @@ public class AppKafkaStream {
 
 		String submittedDate= JsonTool.fetchString(message, eventPayloadConfigurationYML.getAppSubmittDatePath());
 
-		if(submittedDate!=null&&submittedDate!=ResultsExtractorConstants.STRING_EMPTY) {
+		if(submittedDate!=null && !submittedDate.isEmpty()) {
 			try {
 				ZonedDateTime recordDate = ZonedDateTime.parse(submittedDate, DateTimeFormatter.ofPattern(eventPayloadConfigurationYML.getSourceTimeStampFormat()));
 				flag=true;

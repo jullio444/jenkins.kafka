@@ -52,7 +52,7 @@ public class AppService {
 		String applicationSubmittedDate= JsonTool.fetchString(data, eventPayloadConfigurationYML.getAppSubmittDatePath());
 		LOGGER.info("{} Metrics evaluation: the submitted time is {} ",filterType,applicationSubmittedDate);
 
-		if(applicationSubmittedDate!=null&&applicationSubmittedDate!=ResultsExtractorConstants.STRING_EMPTY) {
+		if(applicationSubmittedDate!=null && !applicationSubmittedDate.isEmpty()) {
 			
 			try{
 
