@@ -46,7 +46,7 @@ public class AppService {
 		return Boolean.TRUE;
 	}
 
-	public boolean filterSubmittedDate(String filterType,JsonNode data, String appSubmittedDatePath) {
+	public boolean filterSubmittedDate(String filterType,JsonNode data) {
 
 		boolean flag= false;
 		String applicationSubmittedDate= JsonTool.fetchString(data, eventPayloadConfigurationYML.getAppSubmittDatePath());
@@ -63,7 +63,7 @@ public class AppService {
 
 				switch(filterType) {
 
-				case AppAOConstants.DAY_METRICTYPE: if(sameDay&&sameMonth&&sameYear==true) {
+				case AppAOConstants.DAY_METRICTYPE: if(sameDay&&sameMonth&&sameYear) {
 															flag=true;
 															LOGGER.info("{} Metrics evaluation: day condition satisfied", filterType);
 														}else {
@@ -71,7 +71,7 @@ public class AppService {
 														}
 														break;
 
-				case AppAOConstants.MONTH_METRICTYPE: if(sameMonth&&sameYear==true) {
+				case AppAOConstants.MONTH_METRICTYPE: if(sameMonth&&sameYear) {
 															flag=true;
 															LOGGER.info("{} Metrics evaluation: month condition satisfied", filterType);
 														}else {
@@ -79,7 +79,7 @@ public class AppService {
 														}
 														break;
 
-				case AppAOConstants.YEAR_METRICTYPE: if(sameYear==true) {
+				case AppAOConstants.YEAR_METRICTYPE: if(sameYear) {
 															flag=true;
 															LOGGER.info("{} Metrics evaluation: year condition satisfied", filterType);
 														}else {

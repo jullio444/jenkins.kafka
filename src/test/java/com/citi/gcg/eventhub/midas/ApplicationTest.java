@@ -465,23 +465,23 @@ public class ApplicationTest {
 		JsonNode node3= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 
 
-		assertTrue(appService.filterSubmittedDate("DAY", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("MONTH", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("YEAR", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertFalse(appService.filterSubmittedDate("UNKNOWNTYPE", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
+		assertTrue(appService.filterSubmittedDate("DAY", node));
+		assertTrue(appService.filterSubmittedDate("MONTH", node));
+		assertTrue(appService.filterSubmittedDate("YEAR", node));
+		assertFalse(appService.filterSubmittedDate("UNKNOWNTYPE", node));
 
 
-		assertFalse(appService.filterSubmittedDate("DAY", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("MONTH", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("YEAR", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
+		assertFalse(appService.filterSubmittedDate("DAY", node1));
+		assertTrue(appService.filterSubmittedDate("MONTH", node1));
+		assertTrue(appService.filterSubmittedDate("YEAR", node1));
 
-		assertFalse(appService.filterSubmittedDate("DAY", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertFalse(appService.filterSubmittedDate("MONTH", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("YEAR", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
+		assertFalse(appService.filterSubmittedDate("DAY", node2));
+		assertFalse(appService.filterSubmittedDate("MONTH", node2));
+		assertTrue(appService.filterSubmittedDate("YEAR", node2));
 
-		assertFalse(appService.filterSubmittedDate("DAY", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertFalse(appService.filterSubmittedDate("MONTH", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertFalse(appService.filterSubmittedDate("YEAR", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
+		assertFalse(appService.filterSubmittedDate("DAY", node3));
+		assertFalse(appService.filterSubmittedDate("MONTH", node3));
+		assertFalse(appService.filterSubmittedDate("YEAR", node3));
 	}
 
 	@Test

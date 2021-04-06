@@ -163,7 +163,7 @@ public class AppKafkaStream {
 		stream
 		.filter((k,v)-> v!=null)
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))
-		.filter((k,v)-> appService.filterSubmittedDate(AppAOConstants.DAY_METRICTYPE, v, eventPayloadConfigurationYML.getAppSubmittDatePath()))
+		.filter((k,v)-> appService.filterSubmittedDate(AppAOConstants.DAY_METRICTYPE, v))
 		.selectKey((k,v) -> k = filtertNullKey())
 		.groupByKey()
 		.windowedBy(TimeWindows.of(Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds())))
@@ -183,7 +183,7 @@ public class AppKafkaStream {
 		stream
 		.filter((k,v)-> v!=null)
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))
-		.filter((k,v)-> appService.filterSubmittedDate(AppAOConstants.MONTH_METRICTYPE, v, eventPayloadConfigurationYML.getAppSubmittDatePath()))
+		.filter((k,v)-> appService.filterSubmittedDate(AppAOConstants.MONTH_METRICTYPE, v))
 		.selectKey((k,v) -> k = filtertNullKey())
 		.groupByKey()
 		.windowedBy(TimeWindows.of(Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds())))
@@ -203,7 +203,7 @@ public class AppKafkaStream {
 		stream
 		.filter((k,v)-> v!=null)
 		.filter((key, value) -> appService.filterEvents(eventPayloadConfigurationYML.getFilters(), value))
-		.filter((k,v)-> appService.filterSubmittedDate(AppAOConstants.YEAR_METRICTYPE, v, eventPayloadConfigurationYML.getAppSubmittDatePath()))
+		.filter((k,v)-> appService.filterSubmittedDate(AppAOConstants.YEAR_METRICTYPE, v))
 		.selectKey((k,v) -> k = filtertNullKey())
 		.groupByKey()
 		.windowedBy(TimeWindows.of(Duration.ofSeconds(kafkaStreamsConfigurationYML.getWindowSizeSeconds())))
@@ -236,7 +236,7 @@ public class AppKafkaStream {
 
 		if(submittedDate!=null && !submittedDate.isEmpty()) {
 			try {
-				ZonedDateTime recordDate = ZonedDateTime.parse(submittedDate, DateTimeFormatter.ofPattern(eventPayloadConfigurationYML.getSourceTimeStampFormat()));
+				ZonedDateTime.parse(submittedDate, DateTimeFormatter.ofPattern(eventPayloadConfigurationYML.getSourceTimeStampFormat()));
 				flag=true;
 			}catch(Exception e) {
 				LOGGER.warn("LifeTime Metrics Evaluation: An issue with parsing the applicationSubmittedDate due to invalid format with the following error {}", e.getLocalizedMessage());
