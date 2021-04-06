@@ -84,8 +84,6 @@ public class ApplicationTest {
 
 	private static final String MODIFY_APPLICATION_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"%s\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"applicationSubmittedDate\":\"%s\",\"previousStatus\": \"%s\",\"status\": \"%s\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
 
-	//	private static final String MODIFY_APPLICATIONSUBMITTED_INPUT="{\"event\": {\"header\": {\"name\": \"GCB.NAM.Retail.Midas.AccountOpening.Messages\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"preQualifyUserResultNotification\",\"corId\": \"d321fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"%s\"}},\"body\": {\"requestId\": \"G1MQ0YERlJJLW\",\"applicationId\": \"\",\"partnerCustomerIdentifier\": \"C123456799TDPyGd\",\"citiCustomerIdentifier\": \"135429878191148\",\"epochMillis\": \"1602087421798\",\"previousStatus\": \"%s\",\"status\": \"%s\",\"context\": \"COLLECTION_CONTEXT_ACCOUNT_CREATION\",\"details\": [{\"type\": \"\",\"reason\": \"\",\"address\": {\"city\": \"\",\"state\": \"\",\"zip\": \"\"},\"dateOfBirth\": {\"month\": \"\",\"year\": \"\"}}]}}}";
-
 
 	private static final String ACCOUNT_OPEN_SAMPLE1="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"applicationSubmittedDate\":\"2021-02-24 23:45:58 UTC\",\"previousStatus\": \"\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"071\",\"class\": \"009\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
 	private static final String ACCOUNT_OPEN_SAMPLE2="{\"event\": {\"header\": {\"name\": \"GCB/NAM/US/Retail/Midas/AccountManagement/AccountOpening/AccountOpened\",\"version\": \"1.0\",\"producerCSI\": \"169956\",\"channel\": \"MIDAS\",\"countryCode\": \"US\",\"businessCode\": \"GCB\",\"domain\": \"Acquire\",\"uuid\": \"UR-120220191142\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2019-08-08 10:12:25 UTC\",\"eventTimeStamp\": \"2019-08-08 10:12:25 UTC\",\"custom\": {\"appName\": \"OAO\",\"apiKey\": \"openAccount\",\"corId\": \"e621fd3e-5f54-4fbf-8256-7d5b544e0e77\",\"tenantId\": \"MIDAS\"}},\"body\": {\"requestId\": \"263bb041-7d29-4a27-8908-dce3e2a0e397\",\"applicationId\": \"1111\",\"accountNumber\": \"40500101823\",\"applicationSubmittedDate\":\"2021-02-24 23:45:58 UTC\",\"previousStatus\": \"\",\"status\": \"OPENED\",\"customerType\": \"PRIMARY_CUSTOMER\",\"cin\": \"5156770400055579\",\"type\": \"038\",\"class\": \"001\",\"partnerID\": \"192b9d08d3e4fd36ee83721674b02f3c\",\"citiCustomerRefID\": \"135429878191148\",\"valuePropCode\": \"051\",\"gcfId\": \"20280137144250600\"}}}";
@@ -154,9 +152,7 @@ public class ApplicationTest {
 	private static String setJsonValuesForInput(String tenatId ,String applicationSubmittedDate, String previousStatus, String status) {
 		return String.format(MODIFY_APPLICATION_INPUT ,tenatId,applicationSubmittedDate,previousStatus,status);
 	}
-	//	private static String setJsonValuesForInputSubmitted(String tenatId , String previousStatus, String status) {
-	//		return String.format(MODIFY_APPLICATIONSUBMITTED_INPUT ,tenatId,previousStatus,status);
-	//	}
+	
 	private static List<JsonNode> fetchRecordsFromConsumer(ConsumerRecords<String, String> records) throws JsonMappingException, JsonProcessingException{
 		List<JsonNode> outputNodes= new ArrayList<>();;
 		Iterator<ConsumerRecord<String, String>> recordIterator = records.iterator();
@@ -469,23 +465,23 @@ public class ApplicationTest {
 		JsonNode node3= mapper.readTree(setJsonValuesForInput("MIDAS", dateFormatter.format(cal.getTime()),"APPLICATION_RECEIVED", "APPLICATION_APPROVED"));
 
 
-		assertTrue(appService.filterSubmittedDate("DAY", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("MONTH", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("YEAR", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertFalse(appService.filterSubmittedDate("UNKNOWNTYPE", node, eventPayloadConfigurationYML.getAppSubmittDatePath()));
+		assertTrue(appService.filterSubmittedDate("DAY", node));
+		assertTrue(appService.filterSubmittedDate("MONTH", node));
+		assertTrue(appService.filterSubmittedDate("YEAR", node));
+		assertFalse(appService.filterSubmittedDate("UNKNOWNTYPE", node));
 
 
-		assertFalse(appService.filterSubmittedDate("DAY", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("MONTH", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("YEAR", node1, eventPayloadConfigurationYML.getAppSubmittDatePath()));
+		assertFalse(appService.filterSubmittedDate("DAY", node1));
+		assertTrue(appService.filterSubmittedDate("MONTH", node1));
+		assertTrue(appService.filterSubmittedDate("YEAR", node1));
 
-		assertFalse(appService.filterSubmittedDate("DAY", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertFalse(appService.filterSubmittedDate("MONTH", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertTrue(appService.filterSubmittedDate("YEAR", node2, eventPayloadConfigurationYML.getAppSubmittDatePath()));
+		assertFalse(appService.filterSubmittedDate("DAY", node2));
+		assertFalse(appService.filterSubmittedDate("MONTH", node2));
+		assertTrue(appService.filterSubmittedDate("YEAR", node2));
 
-		assertFalse(appService.filterSubmittedDate("DAY", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertFalse(appService.filterSubmittedDate("MONTH", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
-		assertFalse(appService.filterSubmittedDate("YEAR", node3, eventPayloadConfigurationYML.getAppSubmittDatePath()));
+		assertFalse(appService.filterSubmittedDate("DAY", node3));
+		assertFalse(appService.filterSubmittedDate("MONTH", node3));
+		assertFalse(appService.filterSubmittedDate("YEAR", node3));
 	}
 
 	@Test
