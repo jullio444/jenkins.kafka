@@ -24,21 +24,14 @@ public class JsonTool {
 		JsonNode aux = node;
 		for (String key : keys) {
 			if (aux == null) {
-				LOG.info(String.format("Unable to find the Path: %s", path));
+				LOG.info("Unable to find the Path: %s", path);
 				return null;
 			}
 			// Case if the json is a Json Array
 			if (aux.isArray()) {
 				if (aux.size() > 0) {
-					JsonNode finalNode = null;
 					// *Fetch The first element
-					for (JsonNode internalNode : aux) {
-						finalNode = internalNode;
-						if (finalNode != null) {
-							aux = finalNode;
-							break;
-						}
-					}
+					aux=fetchDefaultFirstElement(aux);
 
 				} else {
 					return null;
@@ -50,6 +43,18 @@ public class JsonTool {
 			} catch (NullPointerException e) {
 				LOG.error(String.format("Unable to extract the value from %s, the field: %s is not there.", path, key));
 				return null;
+			}
+		}
+		return aux;
+	}
+	
+	private static JsonNode fetchDefaultFirstElement(JsonNode aux) {
+		JsonNode tempNode=null;
+		for (JsonNode internalNode : aux) {
+			tempNode = internalNode;
+			if (tempNode != null) {
+				aux = tempNode;
+				break;
 			}
 		}
 		return aux;

@@ -2,6 +2,7 @@ package com.citi.gcg.eventhub.midas;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -487,20 +488,22 @@ public class ApplicationTest {
 	@Test
 	public void testJsonTool() throws JsonMappingException, JsonProcessingException {
 
-		final String SAMPLE_INPUT2="{\"event\": {\"header\": {\"name\": \"IIT Add External Accounts\", \"version\": \"1.0\",\"producerCSI\": \"172624\",\"channel\": \"CBOL |  MOB\",\"countryCode\": \"US\",\"businessCode\": \"Retail Services\",\"domain\": \"Pay\",\"uuid\": \"baa83138-b621-4768-90d9-2d87b91bed1d\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2020-08-27T02:34:12.00Z\",\"eventTimeStamp\": \"2020-08-27T02:34:12.00Z\"},\"body\": {\"customerIdentifiers\": [{\"customerIdentifier\": \"xxxxxxxx150\",\"customerIdType\": \"CCSID\"},{\"customerIdentifier\": \"xxxxxxxxxX173\",\"customerIdType\": \"CIN\"},{\"customerIdentifier\": \"xxxxxxxxxxx178\",\"customerIdType\": \"BASE_CIN\"}],\"accountIdentifiers\": [],\"eventDetails\": {\"confirmationNumber\": \"084378238147108\",\"accountNumber\": \"xxxxxxxx825\",\"routingNumber\": \"121000248\",\"accountType\": \"Checking\",\"financialInstitutionName\": \"WELLS FARGO BANK, NA\",\"accountNickName\": \"Chase Checking\",\"depositAmount1\": \"0.37\",\"depositAmount2\": \"0.27\",\"responseStatus\": \"Success\",\"transactionTimestamp\": \"2020-08-27T02:34:12.00Z\",\"channelId\": \"CBOl\",\"eventName\": \"IIT_TRIAL_VALIDATE\"}}}}";
+		final String SAMPLE_INPUT2="{\"event\": {\"header\": {\"name\": \"IIT Add External Accounts\", \"version\": \"1.0\",\"producerCSI\": \"172624\",\"channel\": \"CBOL |  MOB\",\"countryCode\": \"US\",\"businessCode\": \"Retail Services\",\"domain\": \"Pay\",\"uuid\": \"baa83138-b621-4768-90d9-2d87b91bed1d\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2020-08-27T02:34:12.00Z\",\"eventTimeStamp\": \"2020-08-27T02:34:12.00Z\"},\"body\": {\"customerIdentifiers\": [{\"customerIdentifier\": \"xxxxxxxx150\",\"customerIdType\": \"CCSID\"},{\"customerIdentifier\": \"xxxxxxxxxX173\",\"customerIdType\": \"CIN\"},{\"customerIdentifier\": \"xxxxxxxxxxx178\",\"customerIdType\": \"BASE_CIN\"}],\"accountIdentifiers\": [],\"eventDetails\": {\"confirmationNumber\": \"084378238147108\",\"accountNumber\": \"xxxxxxxx825\",\"routingNumber\": \"121000248\",\"financialInstitutionName\": \"WELLS FARGO BANK, NA\",\"accountNickName\": \"Chase Checking\",\"depositAmount1\": \"0.37\",\"depositAmount2\": \"0.27\",\"responseStatus\": \"Success\",\"transactionTimestamp\": \"2020-08-27T02:34:12.00Z\",\"channelId\": \"CBOl\",\"eventName\": \"IIT_TRIAL_VALIDATE\"}}}}";
 
 		final String SAMPLE_INPUT3="{\"event\": {\"header\": {\"name\": \"IIT Add External Accounts\", \"version\": \"1.0\",\"producerCSI\": \"172624\",\"channel\": \"CBOL |  MOB\",\"countryCode\": \"US\",\"businessCode\": \"Retail Services\",\"domain\": \"Pay\",\"uuid\": \"baa83138-b621-4768-90d9-2d87b91bed1d\",\"sid\": \"44d93b64-d446-475b-89cc-f54158fd516f\",\"businessTransactionTime\": \"2020-08-27T02:34:12.00Z\",\"eventTimeStamp\": \"2020-08-27T02:34:12.00Z\"},\"body\": {\"customerIdentifiers\": [{\"customerIdentifier\": \"xxxxxxxx150\",\"customerIdType\": \"CCSID\"},{\"customerIdentifier\": \"xxxxxxxxxX173\",\"customerIdType\": \"CIN\"},{\"customerIdentifier\": \"xxxxxxxxxxx178\",\"customerIdType\": \"BASE_CIN\"}],\"accountIdentifiers\": [{\"accountIdentifier\": \"xxxxxxxxxx111\",\"accountIdType\": \"accountNumber\"},{\"accountIdentifier\": \"Primary\",\"accountIdType\": \"accountHolderRole\"}],\"eventDetails\": {\"confirmationNumber\": \"084378238147108\",\"accountNumber\": \"xxxxxxxx825\",\"routingNumber\": \"121000248\",\"accountType\": \"Checking\",\"financialInstitutionName\": \"WELLS FARGO BANK, NA\",\"accountNickName\": \"Chase Checking\",\"depositAmount1\": \"0.37\",\"depositAmount2\": \"0.27\",\"responseStatus\": null,\"transactionTimestamp\": \"2020-08-27T02:34:12.00Z\",\"channelId\": \"CBOl\",\"eventName\": \"IIT_TRIAL_VALIDATE\"}}}}";
 
+		
 		JsonNode node1 = mapper.readTree(SAMPLE_INPUT);
 
 		JsonNode node2 = mapper.readTree(SAMPLE_INPUT2);
 
 		JsonNode node3 = mapper.readTree(SAMPLE_INPUT3);
-
+		
 		assertEquals("", JsonTool.fetchString(null, "event.body.eventDetails.responseStatus"));
 		assertEquals("", JsonTool.fetchString(node1, "event.body.eventDetails.citiCustomerIdentifierUnknown"));
 		assertEquals("TX", JsonTool.fetchString(node1, "event.body.details.address.state"));
-		assertEquals("", JsonTool.fetchString(node1, "event.body.details.address.state_2"));
+		assertEquals("", JsonTool.fetchString(node1, "event.body.details.address.state_2"));		
+		assertNull(JsonTool.fetchNode(node2, "event.body.accountIdentifiers.accountIdType"));
 		assertEquals("", JsonTool.fetchString(node2, "event.body.accountIdentifiers.accountIdType"));
 		assertEquals("", JsonTool.fetchString(node3, "event.body.eventDetails.responseStatus"));
 	}

@@ -60,12 +60,9 @@ public class AppService {
 				boolean sameMonth = ZonedDateTime.now(recordDate.getZone()).getMonthValue() == recordDate.getMonthValue();
 				boolean sameYear = ZonedDateTime.now(recordDate.getZone()).getYear() == recordDate.getYear();
 
-				boolean dayMetricsCondition=sameDay&&sameMonth&&sameYear;
-				boolean monthMetricsCondition=sameMonth&&sameYear;
-
 				switch(filterType) {
 
-				case AppAOConstants.DAY_METRICTYPE: if(dayMetricsCondition) {
+				case AppAOConstants.DAY_METRICTYPE: if(sameDay) {
 															flag=true;
 															LOGGER.info("{} Metrics evaluation: day condition satisfied", filterType);
 														}else {
@@ -73,7 +70,7 @@ public class AppService {
 														}
 														break;
 
-				case AppAOConstants.MONTH_METRICTYPE: if(monthMetricsCondition) {
+				case AppAOConstants.MONTH_METRICTYPE: if(sameMonth) {
 															flag=true;
 															LOGGER.info("{} Metrics evaluation: month condition satisfied", filterType);
 														}else {
