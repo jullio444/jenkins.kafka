@@ -58,10 +58,8 @@ public class OutputConfiguration {
 			dailyOutputJsonObj = mapper.readTree(outputFormat);
 			dayOutputJsonObj = mapper.readTree(outputFormatDaily);
 
-			if(LOGGER.isInfoEnabled())
-				LOGGER.info(String.format("lifeTime OutputOutput format: %s", dailyOutputJsonObj.toString()));
-			if(LOGGER.isInfoEnabled())
-				LOGGER.info(String.format("OtherMetrics OutputOutput format: %s", dayOutputJsonObj.toString()));
+			LOGGER.info("lifeTime OutputOutput format: {}", dailyOutputJsonObj);
+			LOGGER.info("OtherMetrics OutputOutput format: {}", dayOutputJsonObj);
 		} catch (IOException exception) {
 			LOGGER.error(String.format("Error Loading the JSON formats %s", exception.toString()));
 		}

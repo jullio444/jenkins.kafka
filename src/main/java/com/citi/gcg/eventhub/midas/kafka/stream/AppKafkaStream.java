@@ -102,7 +102,6 @@ public class AppKafkaStream {
 
 
 
-	//@KafkaStreamsStateStore(name = ApplicationMetricsConstants.TRANSFORMER_STATSTORE, type = StoreType.KEYVALUE, keySerde = ApplicationMetricsConstants.KEY_SERDE, valueSerde = ApplicationMetricsConstants.VALUE_SERDE)
 	@StreamListener(ApplicationMetricsConstants.INPUT_TOPIC)
 	public void proccess(KStream<String, JsonNode> stream) {
 
@@ -233,7 +232,7 @@ public class AppKafkaStream {
 
 		String submittedDate= JsonTool.fetchString(message, eventPayloadConfigurationYML.getAppSubmittDatePath());
 
-		if(submittedDate!=null && !submittedDate.isEmpty()) {
+		if(!submittedDate.isEmpty()) {
 			try {
 				ZonedDateTime.parse(submittedDate, DateTimeFormatter.ofPattern(eventPayloadConfigurationYML.getSourceTimeStampFormat()));
 				flag=true;
