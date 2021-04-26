@@ -24,7 +24,7 @@ public class JsonTool {
 		JsonNode aux = node;
 		for (String key : keys) {
 			if (aux == null) {
-				LOG.info("Unable to find the Path: %s", path);
+				LOG.info("Unable to find the Path: {}", path);
 				return null;
 			}
 			// Case if the json is a Json Array
