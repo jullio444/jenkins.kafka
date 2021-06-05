@@ -27,16 +27,16 @@
             agent any
             steps {
               withSonarQubeEnv('SonarQube') {
-                sh 'mvn clean package sonar-scanner:sonar-scanner'
+                sh 'mvn clean package sonar:sonar'
               }
             }
           }
-          stage("Quality Gate") {
-            steps {
-              timeout(time: 1, unit: 'HOURS') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
-        }
+//           stage("Quality Gate") {
+//             steps {
+//               timeout(time: 1, unit: 'HOURS') {
+//                 waitForQualityGate abortPipeline: true
+//               }
+//             }
+//           }
+//         }
       }
