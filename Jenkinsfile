@@ -9,13 +9,13 @@ try {
   }
 
   if (env.BRANCH_NAME == 'master') {
-        stage('Build') {
+        stage('build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
             }
         }
 
-        stage('Test') {
+        stage('test') {
             steps {
                 sh 'mvn test'
             }
