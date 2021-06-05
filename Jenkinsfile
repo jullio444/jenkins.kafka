@@ -27,12 +27,12 @@ try {
         }
 
 
-    // Run terraform apply
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
-            }
-        }
+//     // Run terraform apply
+//         stage('Deliver') {
+//             steps {
+//                 sh './jenkins/scripts/deliver.sh'
+//             }
+//         }
 
   }
   currentBuild.result = 'SUCCESS'
