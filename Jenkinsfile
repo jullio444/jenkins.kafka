@@ -1,4 +1,4 @@
-≈
+
     stages {
       stage('checkout') {
         node {
