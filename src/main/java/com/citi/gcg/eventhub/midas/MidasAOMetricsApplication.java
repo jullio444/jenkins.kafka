@@ -20,6 +20,5 @@ public class MidasAOMetricsApplication {
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(MidasAOMetricsApplication.class, args);
-		int x = 10;
 	}
 }
