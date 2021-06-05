@@ -14,11 +14,7 @@
  */
 package com.citi.gcg.eventhub.midas.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -40,7 +36,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class ResultsExtractor {
 
 	private static final  Logger LOGGER = LoggerFactory.getLogger(ResultsExtractor.class);
-	
+	private int counter = 0;
+
 	public Map<String, String> extractResultsFromData(JsonNode data, JsonNode conditionInput){
 		return processForExtractResultsFromData(data, conditionInput);
 	}
@@ -134,7 +131,6 @@ public class ResultsExtractor {
 	private int conditionSuccessCount(JsonNode conditionsArray, JsonNode dataJsonObject, String filterType) {
 
 		int successCount = 0;
-
 		for(int conditionIndex = 0; conditionIndex < conditionsArray.size(); conditionIndex++) {
 			JsonNode condition = conditionsArray.get(conditionIndex);
 			List<Boolean> successFlags = new ArrayList<>();
@@ -154,7 +150,15 @@ public class ResultsExtractor {
 	}
 
 	private List<Boolean> checkCondition(List<Boolean> successFlags, String[] field, int fieldIndex, String value, JsonNode dataJsonObject, String filterType){
-
+		counter++;
+		System.out.println("COUNTER--> "+counter);
+		System.out.println("List of successFlags-> "+successFlags);
+		System.out.println("Array for fields-> "+ Arrays.toString(field));
+		System.out.println("FieldIndex-> "+fieldIndex);
+		System.out.println("value-> "+value);
+		System.out.println("dataJsonObject-> "+dataJsonObject);
+		System.out.println("filterType-> "+filterType);
+		System.out.println("######################################################");
 		if(dataJsonObject.isContainerNode()) {
 			if(fieldIndex >= field.length) {
 				throw new MetricsApplicationRuntimeException("Reached maximum fields. Improper condition.");

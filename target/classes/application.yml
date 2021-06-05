@@ -1,0 +1,63 @@
+---
+eventhub:
+  configuration:
+    kstreams:
+      windowSizeSeconds: 20
+      cleanUpPolicy: 3
+      outputTopic: nam.us.retail.digital.derived.midas.ao-prequalifyusernotifications-metrics
+  payload:
+    metrics:
+      conditions:
+        categorization: file://./src/main/resources/udf_conditions.json
+        appSubmittDatePath: event.body.applicationSubmittedDate
+        sourceTimeStampFormat: yyyy-MM-dd HH:mm:ss z
+
+config:
+  output:
+    outputFormat: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"LTD", "domain": "Service", "transactionDateTime": "2021-05-16T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0, "totalAccountsOpened": 0,"totalSavingsAccountsOpened":0, "totalCheckingsAccountsOpened":0}'
+    outputFormatDaily: '{ "name" : "MIDAS_GoogleCache", "productType" : "Account Opening", "producerCSI": "172224", "channel": "Digital", "businessCode": "GCB", "countryCode": "US", "refreshType":"", "domain": "Service", "transactionDateTime": "2021-05-16T02:34:00.00Z", "applicationsSubmitted": 0, "applicationsApproved": 0, "applicationsPended": 0, "applicationsDeclined": 0}'
+    headerFormatTimeZone: UTC
+    timeStampFormat: yyyy-MM-dd'T'HH:mm:ss'Z'
+   
+spring:
+  application:
+    name: I_STR_MIDAS_AO_A_EI_01_EH
+  cloud:
+    stream:
+      bindings:
+        data-input:
+          destination: nam.us.retail.digital.raw.midas.ao-prequalifyusernotifications
+      kafka:
+        streams:
+          binder:
+            brokers: localhost:9092
+            configuration: 
+              application.id: I_STR_MIDAS_AO_A_EI_01_EH
+              commit.interval.ms: 1000             
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: com.citi.gcg.eventhub.midas.kafka.serde.JsonSerde
+              default.deserialization.exception.handler: org.apache.kafka.streams.errors.LogAndContinueExceptionHandler
+              producer.interceptor.class: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
+              consumer.interceptor.class: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
+              consumer.auto.offset.reset: latest
+              state.dir: ./
+#              security.protocol: SASL_SSL
+#              sasl.mechanism: GSSAPI
+#              sasl.kerberos.service.name: kfkusr
+#              ssl.truststore.location: /kfkapps/Kafka/certs/MSPKI/Truststore/PRD_cacerts.jks
+#              ssl.truststore.password: changeit
+#              sasl.jaas.config: "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab=\"/kfkapps/Kafka/certs/keytabs/eckappusr/eckappusr.swgcb-ksqla01p.keytab\" principal=\"eckappusr/swgcb-ksqla01p.nam.nsroot.net@NAM.NSROOT.NET\";"
+
+# application configuration
+logging:
+  file.max-history: 5
+  level:
+    root: INFO
+    org:
+      apache:
+        http: INFO
+      springframework:
+        web: INFO
+  pattern:
+    console: '%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n'
+

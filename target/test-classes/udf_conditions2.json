@@ -1,0 +1,11 @@
+{
+	"filters": {
+		"filterType": "all",
+		"conditions": [
+			{
+				"field": "event.header.custom.tenantId",
+				"value": "MIDAS"
+			}
+		]
+	}
+}

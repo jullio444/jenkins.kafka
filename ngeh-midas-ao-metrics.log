@@ -1,0 +1,34 @@
+2021-May-18 19:30:58.393 ERROR [main] c.c.g.e.m.c.y.EventPayloadConfigurationYML - EventPayloadConfigurationYML: unable to parse the JSON due to the exception /kfkapps/Kafka/config/applications/ecnext/prop/ngeh-midas-ao-metrics/udf_conditions.json
+2021-May-18 19:30:59.298 WARN  [main] o.s.c.a.AnnotationConfigApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'streamsBuilderFactoryManager'; nested exception is org.springframework.kafka.KafkaException: Could not start stream: ; nested exception is org.springframework.kafka.KafkaException: Could not start stream: ; nested exception is org.apache.kafka.streams.errors.StreamsException: org.apache.kafka.streams.errors.ProcessorStateException: base state directory [/logs/ck/projects/ecnext/javalogs/ngeh-midas-ao-metrics/statestore/] doesn't exist and couldn't be created
+2021-May-18 19:30:59.314 ERROR [main] o.s.b.SpringApplication - Application run failed
+org.springframework.context.ApplicationContextException: Failed to start bean 'streamsBuilderFactoryManager'; nested exception is org.springframework.kafka.KafkaException: Could not start stream: ; nested exception is org.springframework.kafka.KafkaException: Could not start stream: ; nested exception is org.apache.kafka.streams.errors.StreamsException: org.apache.kafka.streams.errors.ProcessorStateException: base state directory [/logs/ck/projects/ecnext/javalogs/ngeh-midas-ao-metrics/statestore/] doesn't exist and couldn't be created
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStart(DefaultLifecycleProcessor.java:185)
+	at org.springframework.context.support.DefaultLifecycleProcessor.access$200(DefaultLifecycleProcessor.java:53)
+	at org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup.start(DefaultLifecycleProcessor.java:360)
+	at org.springframework.context.support.DefaultLifecycleProcessor.startBeans(DefaultLifecycleProcessor.java:158)
+	at org.springframework.context.support.DefaultLifecycleProcessor.onRefresh(DefaultLifecycleProcessor.java:122)
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:894)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:553)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:747)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:315)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at com.citi.gcg.eventhub.midas.MidasAOMetricsApplication.main(MidasAOMetricsApplication.java:35)
+Caused by: org.springframework.kafka.KafkaException: Could not start stream: ; nested exception is org.springframework.kafka.KafkaException: Could not start stream: ; nested exception is org.apache.kafka.streams.errors.StreamsException: org.apache.kafka.streams.errors.ProcessorStateException: base state directory [/logs/ck/projects/ecnext/javalogs/ngeh-midas-ao-metrics/statestore/] doesn't exist and couldn't be created
+	at org.springframework.cloud.stream.binder.kafka.streams.StreamsBuilderFactoryManager.start(StreamsBuilderFactoryManager.java:83)
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStart(DefaultLifecycleProcessor.java:182)
+	... 12 common frames omitted
+Caused by: org.springframework.kafka.KafkaException: Could not start stream: ; nested exception is org.apache.kafka.streams.errors.StreamsException: org.apache.kafka.streams.errors.ProcessorStateException: base state directory [/logs/ck/projects/ecnext/javalogs/ngeh-midas-ao-metrics/statestore/] doesn't exist and couldn't be created
+	at org.springframework.kafka.config.StreamsBuilderFactoryBean.start(StreamsBuilderFactoryBean.java:341)
+	at org.springframework.cloud.stream.binder.kafka.streams.StreamsBuilderFactoryManager.start(StreamsBuilderFactoryManager.java:74)
+	... 13 common frames omitted
+Caused by: org.apache.kafka.streams.errors.StreamsException: org.apache.kafka.streams.errors.ProcessorStateException: base state directory [/logs/ck/projects/ecnext/javalogs/ngeh-midas-ao-metrics/statestore/] doesn't exist and couldn't be created
+	at org.apache.kafka.streams.KafkaStreams.<init>(KafkaStreams.java:693)
+	at org.apache.kafka.streams.KafkaStreams.<init>(KafkaStreams.java:562)
+	at org.springframework.kafka.config.StreamsBuilderFactoryBean.start(StreamsBuilderFactoryBean.java:327)
+	... 14 common frames omitted
+Caused by: org.apache.kafka.streams.errors.ProcessorStateException: base state directory [/logs/ck/projects/ecnext/javalogs/ngeh-midas-ao-metrics/statestore/] doesn't exist and couldn't be created
+	at org.apache.kafka.streams.processor.internals.StateDirectory.<init>(StateDirectory.java:85)
+	at org.apache.kafka.streams.KafkaStreams.<init>(KafkaStreams.java:691)
+	... 16 common frames omitted

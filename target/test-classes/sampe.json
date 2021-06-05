@@ -1,0 +1,32 @@
+{
+	"event": {
+		"header": {
+			"businessCode": "GCB",
+			"timeStamp": "2019-08-13 17:36:10 GMT",
+			"producerCSI": "172109",
+			"countrycode": "US",
+			"name": "RossApplication",
+			"channel": "MIDAS",
+			"transactionTime": "2019-08-13 17:36:10 GMT",
+			"version": "1.0",
+			"uuid": "8efa5c10-dd29-11e8-8da0-00505684114a",
+			"sid": "a996a11d-a74f-4987-8360-98008cb68330"
+		},
+		"body": {
+			"operationType": "I",
+			"applicationId": "267460398254241115979192",
+			"applicationVerificationCode": "1",
+			"queueId": "ROAD",
+			"previousQueueId": "APAO",
+			"channel": "CBOL",
+			"applicationGroup": "GOOGLE",
+			"customerType": "N",
+			"firstInitiatorApplicationID": "901",
+			"createdDate": "2019-08-10T03:27:27.722Z",
+			"fileNumber": "4685234",
+			"trackingId": "6673285297",
+			"promotionCode": "ADL123",
+			"createdBy": "ROSS"
+		}
+	}
+}
