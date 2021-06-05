@@ -1,11 +1,11 @@
-pipeline {
-   stage('checkout') {
-     node {
-       cleanWs() //clean the web space to make sure we are running in a clean folder
-       checkout scm   //checkout the repository -- clone the repo
-     }
-   }
+≈
     stages {
+      stage('checkout') {
+        node {
+          cleanWs() //clean the web space to make sure we are running in a clean folder
+          checkout scm   //checkout the repository -- clone the repo
+        }
+      }
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
@@ -27,4 +27,3 @@ pipeline {
             }
         }
     }
-}
