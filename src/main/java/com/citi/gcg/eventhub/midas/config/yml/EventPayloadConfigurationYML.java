@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /***
  * EventPayaload configuration class for fetching the required conditions Json for evaluating the payload
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 @Configuration

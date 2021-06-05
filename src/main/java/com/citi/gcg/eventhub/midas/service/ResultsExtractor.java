@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode;
  * 
  * It is payload evaluation class where it checks the filters and conditions against the payload,
  * finally provides the filtersResult and application status details
- * @author EventHub Dev Team
+ *
  *
  */
 @Service

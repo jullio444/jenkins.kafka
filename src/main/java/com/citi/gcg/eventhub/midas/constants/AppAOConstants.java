@@ -17,7 +17,7 @@ package com.citi.gcg.eventhub.midas.constants;
 /***
  * Application Account opening Constants Class for processor class
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 

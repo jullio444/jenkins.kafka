@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 /***
  * A Custom aggregator class to do aggregation on the payload and send back the result to transformer
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 public class ApplicationMetricsAggregator implements Aggregator<String, JsonNode, JsonNode> {

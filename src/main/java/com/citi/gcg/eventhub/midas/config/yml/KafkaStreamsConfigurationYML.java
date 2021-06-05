@@ -22,7 +22,7 @@ import com.citi.gcg.eventhub.midas.constants.AppYmlConfigConstants;
 /***
  * KafkaStream configuration class for fetching the required kafka related configurations for streaming application
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 @Configuration

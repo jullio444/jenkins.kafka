@@ -17,7 +17,7 @@ package com.citi.gcg.eventhub.midas.constants;
 /***
  * ResultsExtractorConstants Class for ResultExtractor class which evaluates the payload
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 public class ResultsExtractorConstants {

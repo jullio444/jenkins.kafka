@@ -42,7 +42,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * 
  * It is a kafka Transformer class which takes the data from aggregator and consolidate for the minutes window, 
  * finally the consolidate metrics will be forwarded to processor class
- * @author EventHub Dev Team
+ *
  *
  */
 public class MetricsTransformer implements Transformer<Windowed<String>, JsonNode, KeyValue<String, JsonNode>> {

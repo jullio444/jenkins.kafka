@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 /***
  * This class allows to work with Jsons easily
  * It was removed the interaction with Java Reflexion
- * @author EventHub Dev
+ *
  *
  */
 public class JsonTool {

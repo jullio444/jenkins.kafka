@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 /***
  * Custom Json Serde to create Serde (SerializerDeserializer) for JSON.
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 public class JsonSerde extends WrapperSerde<JsonNode>{

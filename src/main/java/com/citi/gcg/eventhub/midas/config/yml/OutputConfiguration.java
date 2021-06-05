@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  * Output configuration class for fetching the required properties to create output Json
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 @Configuration

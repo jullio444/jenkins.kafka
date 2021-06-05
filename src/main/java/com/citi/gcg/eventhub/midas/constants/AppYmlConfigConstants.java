@@ -17,7 +17,7 @@ package com.citi.gcg.eventhub.midas.constants;
 /***
  * AppYmlConfig Constants Class for loading the configurations from YML file
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 

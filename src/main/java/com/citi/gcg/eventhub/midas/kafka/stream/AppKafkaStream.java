@@ -57,7 +57,7 @@ import com.fasterxml.jackson.databind.JsonNode;
  * Kafka Streams class that read the data from input topic 
  * and does filtering, aggregation, transformation and processing to create the required output Json
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 @EnableBinding(KafkaEventProcessor.class)

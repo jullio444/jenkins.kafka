@@ -17,7 +17,7 @@ package com.citi.gcg.eventhub.midas.constants;
 /***
  * ApplicationMetricsConstants Class for kafkastream and aggregator classes
  * 
- * @author EventHub Dev Team
+ *
  *
  */
 
